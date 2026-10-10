@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>봉수대</title>
+<style>
+:root{--bg:#0e0e10;--panel:#151517;--panel2:#1c1c1f;--line:rgba(255,255,255,.08);--fg:rgba(255,255,255,.86);--ink:#f5f5f6;--mut:rgba(255,255,255,.55);--fire:#ff6b4a;--ok:#3cc98a;--miss:#ff6b6b;--warn:#e3a94c;--blue:#9b8cff;--pri:#9b8cff;--pribg:rgba(155,140,255,.12);--sh:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14.5px/1.6 "Pretendard Variable",-apple-system,"Apple SD Gothic Neo",sans-serif}
+.band{background:#1f3b2d;color:#bfe8cf;text-align:center;font-size:11px;letter-spacing:.14em;padding:3px}
+header{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line)}
+header .logo{font-size:17px;font-weight:800;letter-spacing:.02em}
+header .tag{color:var(--mut);font-size:12.5px}
+nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+nav button{background:none;border:0;color:var(--mut);padding:7px 12px;border-radius:6px;font:inherit;cursor:pointer}
+.sep{color:#4a5260;font-size:11px;margin:0 2px 0 8px;align-self:center}
+nav button.on{background:var(--panel2);color:var(--fg)}
+main{padding:16px 18px 60px;max-width:1280px;margin:0 auto}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:15px;margin:0 0 4px}h3{font-size:12.5px;color:var(--mut);font-weight:600;letter-spacing:.05em;margin:18px 0 8px}
+.lead{color:var(--mut);margin:0 0 14px;font-size:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.grid2{display:grid;grid-template-columns:420px 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:960px){.grid2,.grid3{grid-template-columns:1fr}}
+.qbox{display:flex;gap:8px}
+.qbox input{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:10px 12px;font:inherit}
+.btn{background:var(--fire);color:#fff;border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0}
+.chip{background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:14px;padding:3px 10px;font-size:12px;cursor:pointer}
+.sent{border-left:3px solid var(--line);padding:6px 0 6px 12px;margin:10px 0}
+.sent.g-집계{border-color:#b58cf2}.sent.g-다중{border-color:var(--ok)}.sent.g-교차{border-color:var(--blue)}.sent.g-단일{border-color:var(--warn)}
+.badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:9px;border:1px solid var(--line);margin:0 4px 0 0;color:var(--mut)}
+.b-집계{color:#b58cf2;border-color:#4a3a66}.b-다중{color:var(--ok);border-color:#24533d}.b-교차{color:var(--blue);border-color:#28476b}.b-단일{color:var(--warn);border-color:#5a4520}
+.src{font-size:12px;color:var(--mut);margin-top:4px}.src a{color:var(--blue);text-decoration:none}
+.drop{font-size:12px;color:var(--miss);margin-top:12px}
+.steps{font-size:11.5px;color:var(--mut);margin-top:10px}
+.score .n{font-size:26px;font-weight:800}.score .l{font-size:12px;color:var(--mut)}
+svg{width:100%;height:auto;display:block}
+.legend{font-size:12px;color:var(--mut);margin-top:6px}.legend i{font-style:normal;margin-right:12px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.card h4{margin:0 0 4px;font-size:13.5px}.card .more{display:none;font-size:12px;color:var(--mut);margin-top:6px}.card.open .more{display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}th{color:var(--mut);font-size:12px;font-weight:600}
+.ok{color:var(--ok)}.miss{color:var(--miss)}.warn{color:var(--warn)}
+ul{margin:4px 0;padding-left:18px}li{margin:3px 0}
+.spin{color:var(--mut);font-size:13px}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:960px){.pipe{grid-template-columns:1fr 1fr}}
+.pipe div{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12.5px}.pipe b{display:block;font-size:13.5px;margin-bottom:3px}
+.ask3{display:grid;grid-template-columns:440px 1fr 400px;gap:14px;margin-top:14px}
+@media(max-width:1200px){.ask3{grid-template-columns:1fr}}
+.term{font:12.5px/1.5 ui-monospace,Menlo,monospace;background:#0b0e12}
+#log{max-height:520px;overflow:auto}
+.ln{padding:3px 0;border-bottom:1px dashed #1c232c;animation:fade .3s}
+.ln .t{color:var(--mut);margin-right:6px}.ln .k{font-weight:700;margin-right:6px}
+.k-tool{color:var(--blue)}.k-result{color:var(--ok)}.k-check,.k-verify,.k-verified{color:var(--warn)}.k-done{color:var(--fire)}.k-plan,.k-draft,.k-think{color:#b58cf2}
+.mut{color:var(--mut)}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--fire);margin-right:6px;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.2}}@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+#map{height:520px;border-radius:6px;background:#0b0e12}
+.legend2{font-size:12px;color:var(--mut)}
+.leaflet-container{font:12px -apple-system,sans-serif}
+.leaflet-tooltip.tip{background:#151a20;color:#e1e5ea;border:1px solid #f2643a;font-size:11.5px}.leaflet-tooltip.tip:before{display:none}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#151a20;color:#e1e5ea}
+.panel{border-radius:16px;box-shadow:var(--sh)}
+.band{background:#14261d;color:#9fdcbc}
+header{position:sticky;top:0;z-index:50;background:rgba(14,14,16,.9);backdrop-filter:blur(8px);height:58px}
+header .logo{font-size:16px}
+nav button{font-weight:700;border-radius:9px;padding:8px 14px}
+nav button.on{background:var(--pribg)!important;color:var(--pri)!important}
+#seg{display:none;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;margin:0 0 16px;width:max-content;max-width:100%;flex-wrap:wrap}
+#seg.show{display:flex}
+#seg button{background:none;border:0;color:var(--mut);font:inherit;font-weight:700;font-size:13.5px;padding:7px 14px;border-radius:9px;cursor:pointer}
+#seg button.on{background:var(--pri);color:#111}
+#seg .sep2{color:#555;font-size:11px;align-self:center;margin:0 4px}
+/* NAIS식 첫 화면 */
+.hero{text-align:center;padding:9vh 0 10px}
+.hero .t{font-size:42px;font-weight:800;letter-spacing:-.035em;color:var(--ink);line-height:1.15}
+.hero .s{color:var(--mut);font-size:16px;margin:12px auto 24px;max-width:640px}
+.askbox{display:flex;gap:8px;max-width:760px;margin:0 auto;background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:8px 8px 8px 20px;box-shadow:var(--sh)}
+.askbox:focus-within{border-color:var(--pri);box-shadow:0 0 0 4px rgba(155,140,255,.15),var(--sh)}
+.askbox input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--ink);font:inherit;font-size:17px;padding:10px 0}
+.askbox .btn{border-radius:12px;padding:11px 22px;font-size:15px;background:var(--pri);color:#111}
+.chips{justify-content:center;max-width:900px;margin:16px auto 0!important}
+.chip{border-radius:30px!important;padding:7px 15px!important;font-size:13.5px!important;font-weight:600;border:1.5px solid var(--line)!important;background:var(--panel)!important;color:var(--fg)!important}
+.chip:hover{border-color:var(--pri)!important;color:var(--pri)!important}
+.strip{display:none!important;gap:10px;justify-content:center;flex-wrap:wrap;margin:26px auto 0;max-width:900px}
+.strip a{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 16px;color:var(--fg);text-decoration:none;cursor:pointer}
+.strip a b{font-size:20px}.strip a:hover{border-color:var(--pri)}
+.scope{max-width:760px;margin:22px auto 0;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:13px;line-height:1.65;color:var(--mut)}
+.scope b{color:var(--ink)}
+body.home .ask3{display:none}
+body:not(.home) .hero{padding:16px 0 4px}
+body:not(.home) .hero .t,body:not(.home) .hero .s,body:not(.home) .strip,body:not(.home) .scope,body:not(.home) .big{display:none}
+body:not(.home) .askbox{max-width:none}
+body:not(.home) .chips{justify-content:flex-start;max-width:none}
+/* 지도 맥박 마커 */
+.pm{position:relative}.pm i{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--fire);box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+.pm i:after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--fire);animation:ring 1.8s ease-out infinite}
+.pm.hot i{background:#ffd166;box-shadow:0 0 18px #ffd166}.pm.hot i:after{border-color:#ffd166}
+.pm.dim i{background:#555;box-shadow:none}.pm.dim i:after{display:none}
+@keyframes ring{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+.mapbar{display:flex;gap:6px;align-items:center;margin:8px 0}
+.mapbar button{background:var(--panel2);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:5px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+.mapbar button:hover{border-color:var(--pri);color:var(--pri)}
+#evlist{max-height:170px;overflow:auto;font-size:12px}
+#evlist div{padding:4px 6px;border-radius:6px;cursor:pointer;color:var(--mut)}
+#evlist div:hover,#evlist div.on{background:var(--pribg);color:var(--ink)}
+#map{height:420px}
+#kg{width:100%;height:440px;display:block;background:radial-gradient(circle at 50% 45%,rgba(155,140,255,.08),transparent 70%);border-radius:12px}
+.kgleg{font-size:11px;color:var(--mut);margin:6px 0}.kgleg i{font-style:normal;margin-right:8px}
+.kgp .term{margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+.kgp #log{max-height:150px}
+#kg .n{cursor:pointer;transition:opacity .3s}#kg .n.dim{opacity:.15}#kg .n.hot circle{stroke:#ffd166;stroke-width:3;filter:drop-shadow(0 0 6px #ffd166)}
+#kg line{stroke:rgba(255,255,255,.12)}#kg line.hot{stroke:#ffd166;stroke-opacity:.8;stroke-width:1.6}#kg line.dim{stroke-opacity:.03}
+#kg text{fill:rgba(255,255,255,.75);font-size:10px;pointer-events:none}
+#kgtip{position:fixed;pointer-events:none;background:#1c1c1f;border:1px solid #9b8cff;border-radius:8px;padding:6px 9px;font-size:12px;color:#eee;display:none;z-index:99;max-width:300px}
+/* 작전 화면 (Gotham식) */
+body:not(.home) main{max-width:none;padding:0 0 0}
+body:not(.home) #ask .hero{max-width:1100px;margin:0 auto;padding:10px 18px 6px}
+body:not(.home) .chips{display:none}
+.ops{position:relative;height:calc(100vh - 150px);min-height:620px;margin-top:6px;overflow:hidden;border-top:1px solid var(--line)}
+body.home .ops{display:none}
+.ops #map{position:absolute;inset:0;height:auto;border-radius:0}
+.ops .leaflet-tile-pane{filter:brightness(.62) saturate(.8)}
+.fp{position:absolute;top:14px;bottom:70px;width:400px;background:rgba(17,20,26,.9);backdrop-filter:blur(6px);border:1px solid rgba(120,160,220,.25);border-radius:6px;overflow:auto;z-index:500;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.fp.left{left:14px}.fp.right{right:14px;width:380px}
+.fph{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(40,70,120,.35);border-bottom:1px solid rgba(120,160,220,.25);position:sticky;top:0;z-index:2}
+.fph .ico{color:#7fb3ff}.fph b{font-size:14px;color:#fff}.fph .src{margin-left:auto}
+.sit{padding:10px 12px;border-bottom:1px solid var(--line)}.st{font-size:15px;font-weight:800;color:#fff;line-height:1.35}
+.sevrow{font-size:12px;color:var(--mut);margin-top:6px}.sev{display:inline-block;padding:1px 8px;border-radius:3px;font-weight:800;font-size:11.5px;background:#555;color:#fff;margin-left:4px}
+.sev.sig{background:#b8322a}.sev.und{background:#5a6270}
+.fp details{border-bottom:1px solid var(--line)}.fp summary{cursor:pointer;padding:8px 12px;font-size:12.5px;font-weight:700;color:#cfe0ff;background:rgba(40,70,120,.18);list-style:none}
+.fp summary:before{content:"› ";color:#7fb3ff}.fp details[open] summary:before{content:"⌄ "}
+.fp #ans{padding:8px 12px;font-size:13px}.fp .term{padding:6px 12px}
+.ops #kg{height:340px;margin:4px 0}
+.dcard{margin:6px 12px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12.5px}
+.dcard b{color:#fff}.dcard table td{padding:2px 6px;border:0;font-size:12px}
+.ops #evlist{padding:4px 8px 10px;max-height:none}
+.ops .mapbar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:600;margin:0;background:rgba(17,20,26,.85);border:1px solid rgba(120,160,220,.25);border-radius:6px;padding:5px}
+.caption{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:600;background:rgba(10,12,16,.82);color:#eef3ff;font-size:17px;letter-spacing:.04em;padding:10px 22px;border-radius:4px;max-width:46%;text-align:center;font-weight:600;text-transform:uppercase}
+.ico2{display:flex;align-items:center;justify-content:center;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:4px;background:rgba(30,40,55,.92);border:1.5px solid #e3a94c;color:#ffd38a;font-size:14px;box-shadow:0 0 0 0 rgba(255,107,74,.6)}
+.ico2.ev{border-color:#ff6b4a;color:#fff;background:rgba(150,30,20,.9);animation:beacon 1.8s infinite}
+.ico2.hot{border-color:#ffd166;box-shadow:0 0 14px #ffd166}.ico2.dim{opacity:.35;animation:none}
+@keyframes beacon{0%{box-shadow:0 0 0 0 rgba(255,107,74,.7)}100%{box-shadow:0 0 0 16px rgba(255,107,74,0)}}
+.ops .leaflet-tooltip.tip{background:rgba(120,20,20,.92);border:1px solid #ff8a7a;color:#fff;font-weight:700;border-radius:3px}
+@media(max-width:1100px){.fp{position:relative;top:auto;bottom:auto;left:auto!important;right:auto!important;width:auto;margin:10px}.ops{height:auto}.ops #map{position:relative;height:420px}.caption{display:none}}
+.srcd summary{cursor:pointer;font-size:11px;color:var(--mut);display:inline-block;margin-top:2px}.srcd summary::-webkit-details-marker{display:none}
+.drop{margin-top:8px}.next{margin-top:8px;font-size:12.5px;color:#cfe0ff}.next div{padding:2px 0}
+.fp .sent{margin:6px 0;padding:4px 0 4px 10px;font-size:13px}
+/* NAIS식 기술 화면 */
+body{background:radial-gradient(circle,#1c1f26 1px,transparent 1.2px) 0 0/22px 22px,var(--bg)}
+.th{padding:22px 2px 18px}.th h2{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1.25}.th h2 em{font-style:normal;color:var(--pri)}.th p{margin-top:6px;color:var(--mut);font-size:15px}.th p b{color:var(--fg)}
+.tcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}@media(max-width:1000px){.tcards{grid-template-columns:1fr}}
+.tc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,transform .15s}
+.tc:hover{border-color:#5b50b8;transform:translateY(-3px);background:#14161c}
+.tch{display:flex;justify-content:space-between;gap:10px}.tc .nm{font-size:19px;font-weight:800;color:var(--ink)}.tc .en{font-size:12.5px;color:var(--mut)}
+.tcs{display:flex;gap:16px;text-align:right}.tcs b{display:block;font-size:20px;font-weight:800;color:#fff}.tcs span{font-size:11px;color:var(--mut);white-space:nowrap}
+.tc .hl{font-size:15px;font-weight:700;color:#fff}.tc .ds{font-size:13px;color:var(--fg);line-height:1.5;min-height:40px}
+.tags{display:flex;gap:6px;flex-wrap:wrap}.tags span{font-size:11.5px;font-weight:700;border-radius:20px;padding:3px 9px;background:var(--pribg);color:var(--pri)}
+.res{font-size:13px;font-weight:800;border-radius:10px;padding:7px 10px;text-align:center}.res.ok{background:#10291d;color:var(--ok)}.res.no{background:#34181b;color:var(--miss)}.res.mute{background:var(--panel2);color:var(--mut)}
+.tc .more{border-top:1px solid var(--line);padding-top:10px;font-size:13.5px;font-weight:700;color:var(--pri)}
+.fine{font-size:12px;color:var(--mut);margin-top:12px}
+.back{background:none;border:0;color:var(--pri);font:inherit;font-weight:700;cursor:pointer;padding:16px 0 8px}
+.eyebrow{font-size:12.5px;font-weight:700;color:var(--mut)}.sumt{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}.lead2{font-size:15.5px;color:var(--fg);margin-top:6px;max-width:900px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0 14px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.kpi{padding:14px 18px;border-right:1px solid var(--line)}.kpi:last-child{border-right:0}.kl{font-size:12px;font-weight:700;color:var(--mut)}.kv{font-size:26px;font-weight:800;color:#fff}.ks{font-size:12px;color:var(--mut)}
+.tabs2{display:flex;gap:2px;border-bottom:1.5px solid var(--line);margin:4px 0 18px}.tabs2 button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mut);font:inherit;font-weight:700;font-size:15px;padding:11px 16px;cursor:pointer}
+.tabs2 button.on{color:var(--pri);border-bottom-color:var(--pri)}.pane2{display:none}.pane2.on{display:block}
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}.vbox{border:1px solid var(--line);border-radius:12px;padding:14px}.vbox span{font-size:12.5px;color:var(--mut)}.vbox b{display:block;font-size:32px;color:#fff}.vbox em{font-style:normal;font-size:12px;color:var(--mut)}.vbox.ok{border-color:#24533d}.vbox.no{border-color:#5a2a2e}
+#evlist .evc{padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--fg);border-bottom:1px solid var(--line)}
+#evlist .evc:hover,#evlist .evc.on{background:var(--pribg)}
+.chain{font-size:11.5px;color:#9fdcbc;margin-top:3px;line-height:1.45}.chain.no{color:#c9a3a3}
+.princ{margin:4px 0 8px;background:rgba(155,140,255,.07);border:1px solid rgba(155,140,255,.25);border-radius:8px;padding:6px 10px;font-size:12px}
+.princ summary{cursor:pointer;font-weight:800;color:#cfc7ff}.princ ol{margin:6px 0 2px;padding-left:18px}.princ li{margin:3px 0;color:var(--fg)}
+.big{max-width:1080px;margin:26px auto 0;display:grid;grid-template-columns:340px 1fr;gap:14px;text-align:left}
+@media(max-width:900px){.big{grid-template-columns:1fr}}
+.big .bp{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.big h4{margin:0 0 2px;font-size:14px;color:#fff}.big .k{font-size:12px;color:var(--mut)}
+.cmp{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.cmp .row2{display:flex;flex-direction:column;gap:4px}.cmp .bar{height:26px;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-weight:800;color:#111;font-size:15px}
+.yr{display:inline-flex;align-items:center;gap:6px;margin-left:6px;color:#cfe0ff;font-size:12.5px}.yr input{width:150px;accent-color:#9b8cff}
+.nkm{border-radius:50%}
+.kgbtn{margin-left:auto;background:rgba(155,140,255,.15);border:1px solid rgba(155,140,255,.5);color:#d9d2ff;border-radius:6px;padding:3px 10px;font:inherit;font-size:12px;cursor:pointer}
+.fp.right.wide{width:calc(100% - 28px);left:14px;z-index:700}
+.fp.right.wide #kg{height:calc(100vh - 330px)!important;min-height:480px}
+.fp.right.wide #kg text{font-size:14px;font-weight:700;paint-order:stroke;stroke:#11141a;stroke-width:3px}
+nav#nav[hidden]{display:none!important}
+.lg2{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:6px;font-size:12px}.lg2 i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}.lg2 b{color:#fff}.lg2 span{color:var(--mut)}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+<div class="band">공개 데모(정적) · 공개정보 전용 · OSINT ONLY · 모든 문장에 출처 · 과거 성적 공개</div>
+<header>
+  <span class="logo" style="cursor:pointer" onclick="location.href='./'">🔥 봉수대</span><span class="tag">첩보를 모아, 독립적으로 겹치는 것만 정보로</span>
+  <nav id="nav" hidden>
+    <button data-t="ask" class="on">⚔ 전장</button><button data-t="tech" hidden>🧪 기술</button>
+  </nav>
+</header>
+<main>
+<div id="seg"></div>
+
+<section class="tab" id="judge">
+  <h2 style="font-size:22px">누구의 말이 실제 행동으로 이어지는가</h2>
+  <p class="lead">공식 주체의 '앞으로 할 행동' 예고를 모아, 2~7일 안에 실제로 실행됐는지 과거 기록으로 채점. <b>기준선</b> = 아무 날이나 찍었을 때 2~7일 안에 사건이 있을 확률. 배수가 클수록 그 주체의 말은 신호다. 같은 규칙을 한반도에서 고정한 뒤 다른 바다·언어·행위자에 그대로 적용했다.</p>
+  <div class="panel" id="liftConc" style="font-size:16px;margin-bottom:12px;border-left:4px solid var(--fire)"></div>
+  <div class="panel"><svg id="lift" viewBox="0 0 900 300"></svg><div id="liftNote" class="src"></div></div>
+  <div class="grid3" id="liftCards" style="margin-top:12px"></div>
+  <p class="src">점이나 카드를 누르면 상세 화면. 표본이 작아 95% 구간이 넓다 — 그래서 경보는 판정이 아니라 분석관이 먼저 볼 우선순위다.</p>
+</section>
+
+<section class="tab on" id="ask">
+  <div class="hero">
+    <div class="t">위험을 미리 파악할 순 없을까?</div>
+    <div class="s">위협 발표가 실제 행동으로 이어졌는지 과거 기록으로 채점해, 믿을 만한 경고부터 보여줍니다.</div>
+    <div class="askbox"><input id="q" placeholder="예: 김여정이 이번에 경고했다. 앞으로 무슨 일이 벌어질까?"><button class="btn" id="go">봉수 올리기</button></div>
+    <div class="chips" id="chips"></div>
+    <div class="strip" id="strip"></div>
+    <div class="big" id="big"></div>
+    <div class="scope"><b>범위와 한계</b> · 북한 공개 발표·뉴스와 도발 기록(2016~2026) · 도발 10건 중 7건은 경고 없이 일어남 → 경보는 판정이 아니라 우선순위 · 지도 위치는 지역 수준</div>
+  </div>
+  <div class="ops">
+    <div id="map"></div>
+    <div class="mapbar"><button id="play">▶ 사건 재생</button><button data-r="korea">한반도</button><button data-r="scs">남중국해</button><span class="yr"><input type="range" id="yr" min="2016" max="2027" value="2027" step="1"><b id="yrl">10년 전체</b><button id="yrplay">▶ 10년</button></span></div>
+    <div class="fp left">
+      <div class="fph"><span class="ico">◉</span><b>상황</b><span class="src" id="sitMeta"></span></div>
+      <div class="sit"><div id="sitTitle" class="st">—</div><div class="sevrow">판정 <span id="sev" class="sev">—</span></div></div>
+      <details open><summary>요약 · 근거 문장</summary><div id="ans" class="spin">—</div></details>
+      <details><summary>에이전트 활동</summary><div class="term"><div id="log"><div class="ln mut">대기 중</div></div></div></details>
+      <div class="legend2" style="padding:8px 12px"><span class="badge b-단일">단일</span><span class="badge b-교차">교차</span><span class="badge b-다중">다중</span><span class="badge b-집계">집계</span> 근거 계열 수</div>
+    </div>
+    <div class="fp right">
+      <div class="fph"><span class="ico">▤</span><b id="dosT">도시에</b><button id="kgbig" class="kgbtn">⤢ 크게 보기</button></div>
+      <svg id="kg"></svg>
+      <div class="kgleg"><i style="color:#9b8cff">● 주체</i><i style="color:#ff6b4a">● 예고</i><i style="color:#3cc98a">● 사건(경보)</i><i style="color:#ff6b6b">● 사건(놓침)</i><i style="color:#e3a94c">● 장소</i><i style="color:#5aa2e6">● 출처</i></div>
+      <div id="dosCard" class="dcard"></div>
+      <div id="mapnote" class="src" style="padding:0 12px"></div><div id="evlist"></div>
+    </div>
+    <div class="caption" id="cap">질문을 넣으면 봉수대가 근거를 모읍니다</div>
+  </div>
+</section>
+
+<section class="tab" id="tac">
+  <h2>전술 봉수 — 예고형 도발</h2><p class="lead">2024 오물풍선. 북측 공식 주체의 예고 발표를 잡고, 2~7일 안에 실제 살포가 있었는지 합참 발표와 대조.</p>
+  <div class="grid3 score" id="tacScore"></div>
+  <h3>봉수 타임라인 · 2024</h3><div class="panel"><svg id="tl" viewBox="0 0 900 230"></svg>
+  <div class="legend"><i>▮ 대북전단 기사량(소음)</i><i style="color:var(--fire)">▲ 북측 예고 발표</i><i class="ok">● 사전 경보된 살포</i><i class="miss">○ 놓친 살포</i></div></div>
+  <h3>대조 · 2023-09~12 (풍선 도발 없던 기간)</h3><div class="panel"><svg id="ctl" viewBox="0 0 900 110"></svg></div>
+  <h3>봉수 기록 (발표 단위 · 누르면 원문)</h3><div id="eps"></div>
+</section>
+
+<section class="tab" id="sea">
+  <h2>해상 봉수 — 남중국해 2024 (APAC 해상 회색지대)</h2><p class="lead">같은 규칙을 다른 바다·다른 언어·다른 행위자에 그대로 적용: 중국 당국·해경의 '앞으로 할 조치' 경고 → 2~7일 안에 필리핀 선박 물대포·충돌. 정답지 = 필리핀 공식 발표 인용 보도 6건. 영어 뉴스.</p>
+  <div class="grid3 score" id="seaScore"><div class="panel spin">수집·채점 중…</div></div>
+  <h3>봉수 타임라인 · 2024-02~09</h3><div class="panel"><svg id="seatl" viewBox="0 0 900 230"></svg>
+  <div class="legend"><i>▮ 관련 영문 기사량</i><i style="color:var(--fire)">▲ 중국 측 경고 발표</i><i class="ok">● 사전 경보된 충돌</i><i class="miss">○ 놓친 충돌</i></div></div>
+  <h3>봉수 기록</h3><div id="seaeps"></div>
+</section>
+
+<section class="tab" id="iran">
+  <h2>이란 봉수 — 국가 간 보복 예고 × 유가</h2><p class="lead">양방향: 이란의 보복 예고 → 이란 공격 / 이스라엘·미국의 타격 예고 → 타격. 규칙은 한반도에서 고정 후 그대로 적용. 브렌트유(FRED)를 같은 시간축에.</p>
+  <div class="grid3 score" id="irScore"><div class="panel spin">수집·채점 중…</div></div>
+  <div id="irCharts"></div>
+  <h3>유가 반응 (거래일 기준 · 관찰, 규칙 아님)</h3><div class="panel" id="irOil"></div>
+</section>
+
+<section class="tab" id="trend">
+  <h2>추세 봉수 — 느리게 쌓이는 전조</h2><p class="lead">북한 '국경선 요새화'(2024-04~) 관련 보도의 월별 추세와 2026-09-21 서부전선 DMZ 지뢰 폭발.</p>
+  <div class="panel"><svg id="bt" viewBox="0 0 900 260"></svg><div class="legend" id="btLegend"></div></div>
+  <h3>읽는 법</h3><div class="panel" id="btNote"></div>
+</section>
+
+<section class="tab" id="tech">
+  <div id="techList">
+    <div class="th"><h2>누가 어떤 <em>무기 기술</em>에 들어오고 있나</h2><p>논문(OpenAlex)과 국내 특허(KIPRIS)로 본 국가·기관의 진입과 이탈. 정해진 기록이라 예측이 아니라 <b>사실</b>이다.</p></div>
+    <div class="tcards" id="tcards"></div>
+    <p class="fine">국가 수는 저자 소속 기준(공동연구 중복 집계) · 2025년은 색인 지연 가능 · 검증 = 2016~20년만 보고 '뜨는' 국가·기관을 판정 → 2021~25년에 실제로 늘었는지, 판정하지 않은 쪽(대조군)과 비교</p>
+  </div>
+  <div id="techTopic" hidden></div>
+</section>
+
+<section class="tab" id="how">
+  <h2>원리</h2><p class="lead">정보 판정의 오래된 원리: 첩보를 모으고, 독립적으로 겹치는 것만 정보로 본다.</p>
+  <div class="pipe">
+    <div><b>① 모은다</b>뉴스(실시간)·논문·특허·공개 기록. 수집 시각 기록</div>
+    <div><b>② 묶는다</b>같은 발표를 받아쓴 기사는 원천 1개. 계열(북측 발표·군 발표·논문·특허) 표시</div>
+    <div><b>③ 올린다</b>예고(며칠)·추세(몇 달)·기술(몇 년) 세 시간축의 봉수</div>
+    <div><b>④ 채점한다</b>그 봉수가 과거 사건 전에 실제로 올랐는지. 실패도 공개</div>
+  </div>
+  <h3>성적표 — 숨기지 않는다</h3><div class="panel" id="report"></div>
+  <h3>기존 자산 / 해커톤에서 새로 만든 것</h3>
+  <div class="panel"><table><tr><th>가져온 것</th><th>새로 만든 것</th></tr>
+  <tr><td>NAIS 해커톤(9/30~10/1) 에이전트 원칙: 도구 결과로만 답, 없는 숫자 문장 버림 · 기준일 뒤를 가리는 백테스트 틀</td><td>국방 OSINT 수집기(뉴스 일·월별) · 예고 분류기 · 원천 묶기 · 신뢰도 등급 · 정답지 9건(합참 인용) · 지뢰·요새화 추세 · 기술 봉수 데이터 · 이 화면</td></tr></table></div>
+</section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), D=s=>new Date(s+"T00:00:00");
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>openTab(b.dataset.t));
+const WAR=["ask","judge","tac","sea","iran","trend","how"];
+function openTab(id){if(id=="case")id="tac";const war=WAR.includes(id);
+  document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.t==(war?"ask":"tech")));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.id==id));
+  const showSeg=false;
+  $("#seg").classList.toggle("show",showSeg);document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.c==id));
+  setTimeout(()=>{try{MAP&&MAP.invalidateSize()}catch(e){}},60)}
+document.querySelectorAll("#seg button").forEach(b=>b.onclick=()=>openTab(b.dataset.c));
+document.body.classList.add("home");
+if(location.hash){openTab(location.hash.slice(1).split("/")[0]);addEventListener("load",()=>setTimeout(()=>scrollTo(0,0),50))}
+const EX=["김여정이 이번에 경고했다. 앞으로 무슨 일이 벌어질까?","북한이 경고하면 실제로 도발하나? 지난 10년","9월 DMZ 지뢰 폭발, 미리 알 수 있었나?"];
+$("#chips").innerHTML=EX.map(e=>`<span class="chip">${e}</span>`).join("");
+let CACHE={};fetch("data/cache.json").then(r=>r.ok?r.json():{}).then(c=>{CACHE=c;const i=new URLSearchParams(location.search).get("c");if(i!==null){openTab("ask")};if(new URLSearchParams(location.search).get("kg"))setTimeout(()=>$("#kgbig").click(),2500);if(i!==null)document.querySelectorAll(".chip")[+i]?.click()});
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{const q=c.textContent;$("#q").value=q;if(CACHE[q]){document.body.classList.remove("home");openTab("ask");setTimeout(()=>{MAP&&MAP.invalidateSize();buildKG();QREG&&goRegion(QREG)},80);QREG=regionOf(q);$("#log").innerHTML="";logln("plan","사전 실행본 재생 · "+CACHE[q].at);(CACHE[q].answer["도구"]||[]).forEach((s,i)=>setTimeout(()=>{logln("tool",s["도구"]+" "+JSON.stringify(s["인자"]));focusMap(s["도구"],s["인자"])},300*(i+1)));setTimeout(()=>logln("verified",`검증 통과 ${(CACHE[q].answer["문장"]||[]).length} · 탈락 ${(CACHE[q].answer["버린문장"]||[]).length}`),300*((CACHE[q].answer["도구"]||[]).length+1));render(CACHE[q].answer);$("#ans").insertAdjacentHTML("afterbegin",`<p class="src">사전 실행본 · ${esc(CACHE[q].at)} · '봉수 올리기'를 누르면 실시간으로 다시 돌립니다</p>`)}else run()});
+{const p=new URLSearchParams(location.search).get("q");if(p){openTab("ask");$("#q").value=p;setTimeout(run,50)}}
+$("#go").onclick=run;$("#q").onkeydown=e=>{if(e.key=="Enter")run()};
+const esc=s=>String(s??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const KLAB={plan:"계획",think:"판단",tool:"도구 호출",result:"수집",draft:"작성",check:"숫자·이름 검사",verify:"검증자",verified:"검증 결과",done:"완료"};
+function cap(t){const c=$("#cap");if(c)c.textContent=t}
+function logln(k,txt){cap((KLAB[k]||k)+" · "+String(txt).slice(0,70));const t=new Date().toTimeString().slice(0,8);$("#log").insertAdjacentHTML("beforeend",`<div class="ln"><span class="t">${t}</span><span class="k k-${k}">${KLAB[k]||k}</span>${esc(txt)}</div>`);$("#log").scrollTop=1e9}
+let used=new Set();
+function run(){
+  const q=$("#q").value.trim(); if(!q)return; document.body.classList.remove("home"); openTab("ask"); setTimeout(()=>{MAP&&MAP.invalidateSize();buildKG()},80); used=new Set(); QREG=regionOf(q); $("#log").innerHTML=""; logln("plan","질문 접수: "+q);
+  $("#ans").innerHTML='<span class="spin"><span class="pulse"></span>봉수 올리는 중 — 왼쪽에서 진행 상황을 보세요</span>';
+  if(location.hostname!=="127.0.0.1"&&location.hostname!=="localhost"){$("#ans").innerHTML='<p class="spin">이 공개 데모에서는 <b>위의 예시 질문 버튼</b>(미리 실행한 답)만 동작합니다. 직접 질문하려면 저장소에서 로컬로 실행하세요(LLM 키 필요).</p>';logln("done","정적 데모 — 실시간 질의 꺼짐");return}
+  const es=new EventSource("/api/stream?q="+encodeURIComponent(q));
+  es.onmessage=ev=>{const d=JSON.parse(ev.data);
+    if(d.kind=="tool"){used.add(d.name);logln("tool",`${d.name} ${JSON.stringify(d.args)}`);focusMap(d.name,d.args)}
+    else if(d.kind=="result")logln("result",`${d.name} → ${d.text}`);
+    else if(d.kind=="answer"){render(d.answer);es.close()}
+    else if(d.kind=="error"){logln("done","오류: "+d.text);es.close()}
+    else logln(d.kind,d.text||"")};
+  es.onerror=()=>{es.close()};
+}
+function render(r){
+  let h=`<p style="font-size:15.5px;margin:0 0 8px;color:#fff"><b>${esc(r["요약"])}</b></p>`;
+  (r["문장"]||[]).forEach(s=>{h+=`<div class="sent g-${s["등급"]}"><span class="badge b-${s["등급"]}">${s["등급"]}</span>${s["미검증"]?'<span class="badge warn">미검증</span>':""}${esc(s.text)}<details class="srcd"><summary>출처 ${(s["근거"]||[]).length}</summary><div class="src">${(s["근거"]||[]).map(g=>`· [${esc(g["계열"])}] ${g["링크"]?`<a href="${esc(g["링크"])}" target="_blank">${esc(g["제목"])}</a>`:esc(g["제목"])}`).join("<br>")}</div></details></div>`});
+  if((r["버린문장"]||[]).length)h+=`<details class="srcd drop"><summary>검증에서 버린 문장 ${r["버린문장"].length}</summary>`+r["버린문장"].map(s=>"· "+esc(s.text)+(s["검증실패"]?` (${esc(s["검증실패"].join(", "))})`:"")).join("<br>")+`</details>`;
+  if((r["다음확인"]||[]).length)h+=`<div class="next">${r["다음확인"].slice(0,2).map(x=>`<div>☐ ${esc(x)}</div>`).join("")}</div>`;
+  if((r["한계"]||[]).length)h+=`<div class="src" style="margin-top:6px">한계 · ${esc(r["한계"][0])}</div>`;
+  $("#ans").innerHTML=h;
+  $("#sitTitle").textContent=$("#q").value;$("#sitMeta").textContent=new Date().toTimeString().slice(0,5)+" · 봉수대";
+  const g=(r["문장"]||[]).map(s=>s["등급"]),sv=$("#sev");sv.textContent=g.includes("다중")?"다중 확인":g.includes("교차")?"교차 확인":"단일 출처";sv.className="sev "+(g.includes("교차")||g.includes("다중")?"sig":"und");
+  cap(r["요약"]?String(r["요약"]).split(/[.。]/)[0].slice(0,60):"완료");
+  setTimeout(()=>{const s=JSON.stringify(r);highlightAnswer(s);kgAnswer(s)},1300);
+  $("#steps").innerHTML=(r["도구"]||[]).map(s=>`· ${esc(s["도구"])} ${esc(JSON.stringify(s["인자"]))}`).join("<br>")||"—";
+}
+function wilson(k,n){if(!n)return[0,0];const z=1.96,p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,w=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return[Math.round(100*(c-w)),Math.round(100*(c+w))]}
+// ---- 지도 (지역 수준 대략 위치) — 맥박 마커 · 사건 재생 · 답에 나온 곳 강조
+const PLACES={korea:[["평양",39.03,125.75,"김정은·국방성·조선중앙통신 발표"],["서부전선 DMZ",37.95,126.75,"2026-09-21 지뢰 폭발(합참: 서부전선)"],["동부전선 MDL",38.30,128.20,"2026-08-16 MDL 침범·경고사격"],["서울",37.57,126.98,"2024-06-24 풍선 수도권 진입","left"],["접경 풍선 낙하",37.90,127.40,"2024 오물풍선 낙하(경기·강원)"]],
+ scs:[["아융인 암초",9.73,115.87,"2024 보급선 충돌·승선","left"],["사비나 암초",9.75,116.48,"2024-08 충돌·들이받기"],["스카버러 암초",15.15,117.76,"2024-04-30 물대포"]],
+ me:[["테헤란",35.69,51.39,"이란","left"],["텔아비브",32.08,34.78,"이스라엘","left"],["호르무즈 해협",26.57,56.25,"2026 위기 · 유가 20일 +58%"]]};
+const TOOLREG={warnings:"korea",backtest:"korea",border_trend:"korea",sea:"scs",iran:"me"};
+let MAP,MK={},TIMELINE=[];
+try{MAP=L.map("map",{zoomControl:false,preferCanvas:true}).setView([25,95],3);
+ L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"Imagery © Esri, Maxar, Earthstar Geographics",maxZoom:12}).addTo(MAP);
+ L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",{maxZoom:12,opacity:.7}).addTo(MAP);
+ for(const [r,pts] of Object.entries(PLACES))pts.forEach(p=>{const ic=/DMZ|MDL|낙하/.test(p[0])?"⚠":/암초/.test(p[0])?"⚓":/호르무즈/.test(p[0])?"⛽":/테헤란|텔아비브/.test(p[0])?"✈":"◎",isEv=/DMZ|MDL|암초|낙하/.test(p[0]);
+   L.circle([p[1],p[2]],{radius:/암초/.test(p[0])?25000:40000,color:"#ff9a5a",weight:1,fillColor:"#ff6b4a",fillOpacity:.12,dashArray:"4 4"}).addTo(MAP);
+   const m=L.marker([p[1],p[2]],{icon:L.divIcon({className:"",html:`<div class="ico2 ${isEv?"ev":""}">${ic}</div>`,iconSize:[0,0]})}).addTo(MAP).bindTooltip(`<b>${p[0]}</b><br><span style="color:#999">${p[3]}</span>`,{direction:p[4]||"right",className:"tip",offset:[p[4]?-10:10,0]});MK[p[0]]={m,r,p}});
+}catch(e){$("#map").innerHTML='<p class="spin">지도 불러오기 실패(오프라인)</p>'}
+// 북한 10년 레이어 — CSIS 도발 278건 · 좌표: CNS 발사장 / 지명 추정 / 위치 미상
+let NKL=null,NKG=[];
+fetch("data/nk10-sites.json").then(r=>r.ok?r.json():null).then(s=>{window._sites=s});
+fetch("data/nk10-geo.json").then(r=>r.ok?r.json():null).then(G=>{if(!G||!MAP)return;NKG=G;NKL=L.layerGroup().addTo(MAP);drawNK(2027)});
+function drawNK(upto){if(!NKL)return;NKL.clearLayers();let n=0;
+  NKG.forEach((g,i)=>{const y=+g.date.slice(0,4);if(upto<2027&&y!=upto)return;n++;
+    const unk=g.prec=="미상",ang=i*2.399,rr=unk?.15+((i*37)%100)/400:0,jy=Math.sin(ang)*rr,jx=Math.cos(ang)*rr*1.3,col=/Nuclear/.test(g.type)?"#ffd166":/Missile/.test(g.type)?"#ff6b4a":"#e3a94c",
+      ring=g.onset?(g.warned?"#3cc98a":"#ff4d6d"):"rgba(255,255,255,.35)";
+    L.circleMarker([g.lat+jy,g.lon+jx],{radius:g.onset?6:4,color:ring,weight:g.onset?2.5:1,fillColor:col,fillOpacity:unk?.25:.75,dashArray:unk?"2 2":null})
+     .bindTooltip(`<b>${g.date}</b> ${esc(g.event)}<br><span style="color:#aaa">${esc(g.site||g.loc)} · ${g.prec}</span>${(()=>{const s=(window._sites||[]).find(x=>x.site==(g.site||g.loc));return s&&s.on?`<br><span style="color:#cfc7ff">이 장소: 도발 ${s.all}회 · 직전 경고 ${s.w}/${s.on}</span>`:""})()}${g.onset?(g.warned?`<br><span style="color:#3cc98a">● ${g.lead.join("·")}일 전 북한 경고</span><br><span style="color:#aaa">${esc((g.wt||"").slice(0,46))}</span>`:'<br><span style="color:#ff6b8a">○ 직전 경고 없음</span>'):""}`,{className:"tip"}).addTo(NKL)});
+  $("#yrl").textContent=upto<2027?`${upto}년 · ${n}건`:`10년 전체 · ${n}건`}
+document.addEventListener("input",e=>{if(e.target.id=="yr")drawNK(+e.target.value)});
+let yrT=null;document.addEventListener("click",e=>{if(e.target.id!="yrplay")return;if(yrT){clearInterval(yrT);yrT=null;e.target.textContent="▶ 10년";return}
+  let y=2016;e.target.textContent="■ 멈춤";goRegion("korea");MAP.flyTo([38.9,127.0],6.4,{duration:1});const st=()=>{$("#yr").value=y;drawNK(y);if(++y>2026){clearInterval(yrT);yrT=null;e.target.textContent="▶ 10년";setTimeout(()=>{$("#yr").value=2027;drawNK(2027)},1500)}};st();yrT=setInterval(st,1400)});
+let QREG=null;
+function regionOf(t){t=String(t||"");return /이란|Iran|이스라엘|Israel|호르무즈|중동/.test(t)?"me":/남중국해|South China|필리핀|Philippine|Shoal|해경/.test(t)?"scs":/북한|DMZ|MDL|풍선|전단|지뢰|한반도|김여정/.test(t)?"korea":null}
+function setCls(m,c){const el=m.getElement()&&m.getElement().querySelector(".ico2");if(el){el.classList.remove("hot","dim");if(c)el.classList.add(c)}}
+function dossier(r){const B=window._tacB,S=window._seaS,c=$("#dosCard");if(!c)return;const mk=(nm,D)=>{const ep=D.episodes,eh=ep.filter(e=>e.result).length,l=100*eh/ep.length/D.baseline.pct,[a,b]=wilson(eh,ep.length),v=a/D.baseline.pct>1?"신호":"미결";
+  return `<b style="font-size:14px">${nm}</b><table><tr><td>예고 묶음</td><td><b>${ep.length}</b></td><td>7일 내 실행</td><td><b>${eh}</b></td></tr><tr><td>기준선</td><td>${D.baseline.pct}%</td><td>배수</td><td><b class="${v=="신호"?"ok":""}">${l.toFixed(1)}배 · ${v}</b></td></tr><tr><td>사건</td><td>${D.events.length}</td><td>예고 없이</td><td>${D.events.filter(e=>!e.warned).length}</td></tr></table>`};
+  const t10=window._nk10&&window._nk10.strict,nk=t10?`<div style="margin-top:8px;border-top:1px solid var(--line);padding-top:8px"><b>북한 도발 10년</b><table><tr><td>도발 직전 경고</td><td><b>${t10.hit[0]}/${t10.hit[1]}</b></td><td>평소 경고</td><td><b>${t10.fa[0]}/${t10.fa[1]}</b></td></tr><tr><td>평소 대비</td><td><b class="ok">${t10.lr}배 · 신호</b></td><td>경고 없던 도발</td><td>${t10.hit[1]-t10.hit[0]}</td></tr></table></div>`:"";
+  const SI=(window._sites||[]).filter(x=>x.on>=3&&!/미상/.test(x.site)).sort((a,b)=>b.w/b.on-a.w/a.on),sit=SI.length?`<div style="margin-top:8px;border-top:1px solid var(--line);padding-top:8px"><b>장소별 성적표</b> <span class="src">도발 직전 경고 비율 · 경향(표본 작음)</span><table>${SI.map(x=>`<tr style="cursor:pointer" onclick="MAP.flyTo([${x.lat},${x.lon}],8)"><td>${esc(x.site)}</td><td>전체 ${x.all}</td><td><b class="${x.w/x.on>=.4?"ok":""}">${x.w}/${x.on}</b></td><td class="mut">${Math.round(100*x.w/x.on)}%</td></tr>`).join("")}</table><div class="src">큰 무기 시험장(동창리·신포)은 절반이 예고, 단거리 다발 지역(순안·원산)은 거의 무예고</div></div>`:"";
+  c.innerHTML=r=="korea"&&B?mk("북한 (풍선 예고)",B)+nk+sit:r=="scs"&&S?mk("중국 해경·정부 (남중국해)",S):r=="me"?"<b>이란 ↔ 이스라엘·미국</b><br><span class='src'>"+(window._iranPartial?"수집 중 — 판정 보류":"상세: 사례 → 이란")+"</span>":"";$("#dosT").textContent={korea:"한반도 도시에",scs:"남중국해 도시에",me:"중동 도시에"}[r]||"도시에"}
+function goRegion(r){kgRegion(r);dossier(r);if(!MAP||!r)return;MAP.invalidateSize();MAP.once("moveend",()=>{MAP.invalidateSize();if(NKL)drawNK(+($("#yr")||{value:2027}).value)});const pts=PLACES[r];MAP.flyToBounds(L.latLngBounds(pts.map(p=>[p[1],p[2]])).pad(1.2),{duration:1.1,maxZoom:7});
+  Object.values(MK).forEach(o=>{setCls(o.m,o.r==r?null:"dim");o.r==r?o.m.openTooltip():o.m.closeTooltip()});
+  $("#mapnote").textContent={korea:"한반도 — 풍선·DMZ·MDL",scs:"남중국해 — 중국 해경 vs 필리핀",me:"중동 — 이란·이스라엘·호르무즈"}[r];listEvents(r)}
+function focusMap(tool,args){let r=QREG||TOOLREG[tool];if(!QREG&&tool=="news")r=regionOf(JSON.stringify(args))||"korea";goRegion(r)}
+function highlightAnswer(text){Object.values(MK).forEach(o=>{const key=o.p[0].split(" ")[0];if(text.includes(key)){setCls(o.m,"hot");o.m.openTooltip()}})}
+function placeFor(r,name){if(r=="scs")return /사비나|Sabina/.test(name)?"사비나 암초":/스카버러/.test(name)?"스카버러 암초":"아융인 암초";if(r=="me")return /이스라엘|미군|미·/.test(name)&&!/이란 /.test(name)?"테헤란":"텔아비브";return /지뢰/.test(name)?"서부전선 DMZ":/MDL/.test(name)?"동부전선 MDL":/5차/.test(name)?"서울":"접경 풍선 낙하"}
+const DD=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+function chainFor(eps,d){const pre=eps.filter(e=>{const x=DD(e.date,d);return x>=2&&x<=7}).sort((a,b)=>a.date<b.date?1:-1)[0];
+  if(pre)return{hit:true,lead:DD(pre.date,d),date:pre.date,actor:pre.actor.replace("(주체 미상)",""),title:pre.titles[0].title.replace(/ - [^-]+$/,""),n:pre.n_articles};
+  const last=eps.filter(e=>e.date<d).sort((a,b)=>a.date<b.date?1:-1)[0];return{hit:false,last:last?{date:last.date,actor:last.actor.replace("(주체 미상)",""),gap:DD(last.date,d)}:null}}
+function buildTimeline(){TIMELINE=[];const B=window._tacB,S=window._seaS,I=window._iran;
+  B&&B.events.forEach(e=>TIMELINE.push({r:"korea",d:e.date,n:e.name,src:e.src,c:chainFor(B.episodes,e.date)}));
+  TIMELINE.push({r:"korea",d:"2026-08-16",n:"동부전선 MDL 침범·경고사격",src:"군 발표",c:{note:"이것 자체가 전조 후보 — 아래 지뢰 폭발 36일 전"}},{r:"korea",d:"2026-09-21",n:"서부전선 DMZ 지뢰 폭발",src:"합참",c:{hit:false,note:"공식 예고 없음 · 36일 전 MDL 침범이 유일한 전조 후보(같은 급등 4회 중 사고 1회)"}});
+  S&&S.events.forEach(e=>TIMELINE.push({r:"scs",d:e.date,n:e.name,src:e.src,c:chainFor(S.episodes,e.date)}));
+  I&&!window._iranPartial&&["IR","IL"].forEach(k=>I[k].events.forEach(e=>TIMELINE.push({r:"me",d:e.date,n:(k=="IR"?"이란 ":"")+e.name,src:"공식 발표 인용 보도",c:chainFor(I[k].episodes.map(x=>({...x,actor:k=="IR"?"이란":"이스라엘·미국"})),e.date)})));
+  TIMELINE.forEach(t=>{t.place=placeFor(t.r,t.n);t.w=t.c&&t.c.hit===true?true:t.c&&t.c.hit===false?false:null});TIMELINE.sort((a,b)=>a.d<b.d?-1:1)}
+function chainHTML(t){const c=t.c||{};if(c.hit)return `<div class="chain ok">🔥 <b>${c.lead}일 전</b> ${c.date.slice(5)} ${esc(c.actor)} 발표 — “${esc(c.title.slice(0,48))}${c.title.length>48?"…":""}”${c.n>1?` <span class="mut">(받아쓴 기사 ${c.n}건 = 원천 1)</span>`:""}</div>`;
+  if(c.note)return `<div class="chain ${c.hit===false?"no":""}">${esc(c.note)}</div>`;
+  return `<div class="chain no">직전 2~7일 공식 예고 없음${c.last?` · 마지막 예고 ${c.last.date.slice(5)} ${esc(c.last.actor)} (${c.last.gap}일 전 — 창 밖)`:""}</div>`}
+const PRINCIPLE=`<details class="princ" open><summary>봉수가 오르는 원리</summary><ol><li><b>모은다</b> — 뉴스 제목에서 공식 주체(북 국방성·김여정, 중국 해경·정부)가 <b>‘앞으로 하겠다’</b>고 한 발표만 LLM이 골라낸다. 이미 일어난 일의 보도는 뺀다</li><li><b>묶는다</b> — 같은 주체가 3일 안에 낸 발표는 매체가 몇 곳이든 <b>원천 1개</b></li><li><b>대조한다</b> — 발표 후 <b>2~7일</b> 안에 군·정부가 확인한 사건이 있으면 봉수가 맞은 것(하루 차이는 기사 날짜 오차라 제외)</li><li><b>채점한다</b> — 아무 날이나 찍었을 때의 확률(기준선)과 비교해 배수를 낸다</li></ol></details>`;
+function listEvents(r){if(!TIMELINE.length)buildTimeline();$("#evlist").innerHTML=PRINCIPLE+TIMELINE.filter(t=>!r||t.r==r).map(t=>`<div class="evc" data-i="${TIMELINE.indexOf(t)}"><div><b>${t.d.slice(2)}</b> ${esc(t.n)} <span class="mut">· ${esc(t.src||"")}</span></div>${chainHTML(t)}</div>`).join("");
+  document.querySelectorAll("#evlist .evc").forEach(d=>d.onclick=()=>showEvent(TIMELINE[+d.dataset.i]))}
+function showEvent(t){const o=MK[t.place];if(!o)return;if(KG){const k=KG.N.find(d=>d.d==t.d&&d.r==t.r&&(d.t=="evw"||d.t=="evm"));k&&kgFocus(k.id)}MAP.flyTo(o.m.getLatLng(),6,{duration:.9});Object.values(MK).forEach(x=>{setCls(x.m,x===o?"hot":"dim");x.m.closeTooltip()});
+  const c=t.c||{};o.m.setTooltipContent(`<b>${t.d}</b> ${esc(t.n)}<br>${c.hit?`🔥 ${c.lead}일 전 ${c.date.slice(5)} ${esc(c.actor)} 발표`:c.note?esc(c.note.slice(0,40)):"직전 2~7일 공식 예고 없음"}`);o.m.openTooltip();
+  document.querySelectorAll("#evlist .evc").forEach(d=>d.classList.toggle("on",TIMELINE[+d.dataset.i]===t))}
+let playing=null;
+$("#play").onclick=()=>{if(playing){clearInterval(playing);playing=null;$("#play").textContent="▶ 사건 재생";return}
+  if(!TIMELINE.length)buildTimeline();const list=QREG?TIMELINE.filter(t=>t.r==QREG):TIMELINE;let i=0;$("#play").textContent="■ 멈춤";
+  const step=()=>{if(i>=list.length){clearInterval(playing);playing=null;$("#play").textContent="▶ 사건 재생";return}showEvent(list[i++])};step();playing=setInterval(step,1800)};
+document.querySelectorAll(".mapbar [data-r]").forEach(b=>b.onclick=()=>{QREG=b.dataset.r;goRegion(b.dataset.r)});
+// ---- 전술 봉수
+fetch("data/proto-data.json").then(r=>r.json()).then(B=>{
+  const ev=B.events, dev=ev.filter(e=>e.date<"2024-08-01"), tst=ev.filter(e=>e.date>="2024-08-01");
+  const fa=B.episodes.filter(e=>e.period=="ctl"&&!e.result).length;
+  const dw=dev.filter(e=>e.warned).length, ep=B.episodes, eh=ep.filter(e=>e.result).length, [a1,b1]=wilson(dw,dev.length), [a2,b2]=wilson(eh,ep.length);
+  const leads=ep.filter(e=>e.result).map(e=>e.result.lead).sort((a,b)=>a-b), med=leads.length?leads[Math.floor((leads.length-1)/2)]:0;
+  $("#tacScore").innerHTML=`<div class="panel"><div class="n ok">${dw}/${dev.length}</div><div class="l"><b>살포 중 미리 잡은 비율</b> ${Math.round(100*dw/dev.length)}% (95% 구간 ${a1}~${b1}%) · 2024년 5~7월 · 규칙을 이 기간에서 고름</div></div>
+  <div class="panel"><div class="n warn">${eh}/${ep.length}</div><div class="l"><b>북측이 예고하면 7일 안에 실행할 확률</b> ${Math.round(100*eh/ep.length)}% (95% 구간 ${a2}~${b2}%) · 오경보 ${ep.length-eh}건 포함(2023 '불소나기' 등) · <b>시점: 예고 후 중앙값 ${med}일 (범위 ${leads[0]}~${leads[leads.length-1]}일)</b><br><b class="ok">기준선 대비 ${(100*eh/ep.length/B.baseline.pct).toFixed(1)}배</b> — 아무 날이나 찍었을 때 ${B.baseline.pct}%</div></div>
+  <div class="panel"><div class="n miss">${tst.filter(e=>e.warned).length}/${tst.length}</div><div class="l"><b>예고 없이 재개한 살포</b> · 2024년 8·9월(17일·25일 만) · 규칙 고정 후 → 놓침. 공개 뉴스에 전조 없음</div></div>`;
+  $("#eps").innerHTML=B.episodes.slice().reverse().map(e=>`<div class="card" onclick="this.classList.toggle('open')"><h4>▲ ${e.date} · ${esc(e.actor)}</h4>
+   <span class="badge b-단일">원천 1 · 기사 ${e.n_articles} · 매체 ${e.outlets.length}</span>${e.result?`<span class="badge b-다중">${e.result.lead}일 뒤 살포 ${e.result.event.slice(5)}</span>`:`<span class="badge">7일 내 살포 없음</span>`}
+   <div class="more">${e.titles.map(t=>"· "+esc(t.title)).join("<br>")}</div></div>`).join("");
+  function draw(id,from,to,h,show){const x0=30,x1=890,base=h-28,t0=D(from),t1=D(to),X=d=>x0+(D(d)-t0)/(t1-t0)*(x1-x0);let s="",max=1,days=[];
+    for(let d=new Date(t0);d<=t1;d.setDate(d.getDate()+1)){const k=d.toISOString().slice(0,10);days.push(k);max=Math.max(max,B.daily[k]||0)}
+    const bw=(x1-x0)/days.length;days.forEach(k=>{const v=B.daily[k]||0,bh=v/max*(base-60);s+=`<rect x="${X(k)}" y="${base-bh}" width="${Math.max(bw-.5,1)}" height="${bh}" fill="#3a4452"/>`;if(k.endsWith("-01"))s+=`<text x="${X(k)}" y="${h-10}" font-size="11" fill="#8b95a4">${+k.slice(5,7)}월</text>`});
+    if(id=="tl")s+=`<line x1="${X("2024-08-01")}" y1="12" x2="${X("2024-08-01")}" y2="${base}" stroke="#8b95a4" stroke-dasharray="3 3"/><text x="${X("2024-08-01")+4}" y="22" font-size="11" fill="#8b95a4">← 개발 | 시험 →</text>`;
+    B.episodes.filter(e=>e.date>=from&&e.date<=to).forEach(e=>{const x=X(e.date);s+=`<path d="M${x-6},44 L${x+6},44 L${x},32 Z" fill="#f2643a"><title>${e.date} ${e.actor}</title></path>`;if(e.result)s+=`<line x1="${x}" y1="38" x2="${X(e.result.event)}" y2="38" stroke="#f2643a" opacity=".6"/>`});
+    if(show)ev.forEach(e=>{const x=X(e.date);s+=e.warned?`<circle cx="${x}" cy="56" r="5" fill="#4fbf8b"><title>${e.date} ${e.name} · ${e.src}</title></circle>`:`<circle cx="${x}" cy="56" r="5" fill="none" stroke="#e04f5f" stroke-width="2"><title>${e.date} ${e.name} · 놓침 · ${e.src}</title></circle>`});
+    $("#"+id).innerHTML=s}
+  draw("tl","2024-05-01","2024-10-31",230,true);draw("ctl","2023-09-15","2023-12-31",110,false);
+  window._tac={dev,tst,fa};window._tacB=B;report();
+});
+fetch("data/nk10-data.json").then(r=>r.ok?r.json():null).then(d=>{if(d){window._nk10=d;if(KG){d3.select("#kg").selectAll("*").remove();KG=null}report();bigChart()}});
+fetch("data/nk10-trend.json").then(r=>r.ok?r.json():null).then(t=>{if(t){window._trend10=t;bigChart()}});
+fetch("data/gdelt-nk.json").then(r=>r.ok?r.json():null).then(g=>{if(g){window._gd=g;bigChart()}});
+function bigChart(){const g=window._gd,n=window._nk10;if(!g||!n)return;const W=g.weekly,x0=34,x1=740,y0=150,yT=14;
+  const t0=new Date(W[0][0]),t1=new Date(W[W.length-1][0]),X=d=>x0+(new Date(d)-t0)/(t1-t0)*(x1-x0),mx=Math.max(...W.map(w=>w[1])),Y=v=>y0-v/mx*(y0-yT);
+  let s=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#333"/>`;
+  for(let y=2016;y<=2026;y+=2)s+=`<text x="${X(y+"-01-01")}" y="${y0+16}" font-size="11" fill="#888" text-anchor="middle">${y}</text>`;
+  s+=`<polyline fill="none" stroke="#9b8cff" stroke-width="1.3" points="${W.map(w=>X(w[0]).toFixed(1)+","+Y(w[1]).toFixed(1)).join(" ")}"/>`;
+  g.events.forEach(e=>{const c=/Missile/.test(e.type)?"#ff6b4a":/Nuclear/.test(e.type)?"#ffd166":"#e3a94c";s+=`<line x1="${X(e.date)}" y1="${y0+22}" x2="${X(e.date)}" y2="${y0+32}" stroke="${c}" stroke-width="1.6"><title>${e.date} ${e.event}</title></line>`});
+  s+=`<text x="${x0}" y="${y0+46}" font-size="11" fill="#888">▮ 도발 ${g.events.length}건 (CSIS · 주황=미사일 · 노랑=핵)</text>`;
+  const TR=window._trend10;let tb="";
+  if(TR){const FAM=[["전략무기",["ICBM","중거리 미사일","잠수함 발사","핵","위성 발사","엔진 시험"],"#ffd166"],["단거리·순항",["단거리 미사일·방사포","순항미사일"],"#ff6b4a"],["회색지대",["오물풍선","DMZ 침범·지뢰","포격","무인기·수중드론","사이버·전파교란"],"#9b8cff"],["기타",["기타"],"#666"]];
+    const ys=[];for(let y=2016;y<=2026;y++)ys.push(String(y));const tot=y=>FAM.reduce((a,f)=>a+f[1].reduce((b,c)=>b+((TR.counts[y]||{})[c]||0),0),0),mx=Math.max(...ys.map(tot)),bw=52,gx=34,hh=150;
+    tb=`<svg viewBox="0 0 760 175" style="width:100%;height:auto">`;ys.forEach((y,i)=>{let yy=hh;const x=gx+i*64;FAM.forEach(f=>{const v=f[1].reduce((b,c)=>b+((TR.counts[y]||{})[c]||0),0);if(!v)return;const hgt=v/mx*(hh-14);yy-=hgt;tb+=`<rect x="${x}" y="${yy}" width="${bw}" height="${hgt}" fill="${f[2]}" opacity=".9"><title>${y} ${f[0]} ${v}건</title></rect>`});
+      tb+=`<text x="${x+bw/2}" y="${hh+16}" font-size="11" fill="#888" text-anchor="middle">${y}</text><text x="${x+bw/2}" y="${yy-4}" font-size="11" fill="#ccc" text-anchor="middle">${tot(y)||""}</text>`});
+    tb+=`</svg>`;const DESC={"전략무기":"미국·일본까지 겨냥하는 큰 무기 시험 — ICBM·중거리·잠수함 발사·핵실험·위성","단거리·순항":"주로 한국을 겨냥한 짧은 사거리 — 단거리 탄도미사일·방사포·순항미사일","회색지대":"전쟁이라 하기엔 애매한 낮은 수위 — 오물풍선·DMZ 침범·지뢰·포격·무인기·GPS 교란","기타":"연락사무소·도로 폭파, 군사훈련, 신형 함정·시설 공개 등"};
+    tb+=`<div class="lg2">${FAM.map(f=>`<div><i style="background:${f[2]}"></i><b>${f[0]}</b> <span>${DESC[f[0]]}</span></div>`).join("")}</div>`;
+    tb=`<div class="bp" style="grid-column:1/-1"><h4>도발 방식이 바뀌었다 — 전략무기 시험 → 단거리 양산 → 회색지대</h4><div class="k">연도별 도발 건수(CSIS) · 2018년은 정상회담 해 · 2026은 10월까지</div>${tb}</div>`}
+  const st=n.strict,ml=Math.max(st.lr,g.lr,5);
+  $("#big").innerHTML=`   <div class="bp cmp"><h4>북한이 "하겠다"고 하면, 정말 할까?</h4>
+    <div class="k">며칠(2~7일) 안에 도발이 시작될 확률</div>
+    <div class="row2"><span class="k">아무 날이나</span><div class="bar" style="width:${17/60*100}%;background:#666">17%</div></div>
+    <div class="row2"><span class="k">북한 당국이 직접 경고한 뒤</span><div class="bar" style="width:${49/60*100}%;background:#3cc98a">49%</div></div>
+    <div class="row2"><span class="k">뉴스 ${(g.n_events/1e4).toFixed(0)}만 건을 기계로 세서 '위협'이 많던 날 뒤</span><div class="bar" style="width:${Math.round(17*g.lr)/60*100}%;background:#888">약 ${Math.round(17*g.lr)}%</div></div>
+    <div class="k">→ 데이터를 많이 모으는 것보다 <b style="color:#fff">누가 한 말인지 가려내는 것</b>이 경보를 만든다 · 지난 10년 도발 114건 기준</div></div>`+tb.replace('style="grid-column:1/-1"','')+`<div class="bp" style="grid-column:1/-1"><h4>북한 10년 · GDELT 사건 ${g.n_events.toLocaleString()}건</h4><div class="k">주간 '위협' 비중(보라) 위에 실제 도발 ${g.events.length}건 — 2015.10 ~ 2026.10</div><svg viewBox="0 0 760 200" preserveAspectRatio="none" style="width:100%;height:200px;margin-top:6px">${s}</svg></div>`}
+// ---- 해상 봉수
+fetch("data/scs-data.json").then(r=>r.ok?r.json():null).then(S=>{
+  if(!S)return;const ev=S.events,ep=S.episodes,w=ev.filter(e=>e.warned).length,eh=ep.filter(e=>e.result).length,[a1,b1]=wilson(w,ev.length),[a2,b2]=wilson(eh,ep.length);
+  const leads=ep.filter(e=>e.result).map(e=>e.result.lead).sort((a,b)=>a-b),med=leads.length?leads[Math.floor((leads.length-1)/2)]:"–";
+  $("#seaScore").innerHTML=`<div class="panel"><div class="n ${w/ev.length>=.5?"ok":"miss"}">${w}/${ev.length}</div><div class="l"><b>충돌 중 미리 잡은 비율</b> ${Math.round(100*w/ev.length)}% (95% 구간 ${a1}~${b1}%) · 규칙은 한반도에서 고정 후 그대로 적용(진짜 시험)</div></div>
+  <div class="panel"><div class="n warn">${eh}/${ep.length}</div><div class="l"><b>중국 측이 경고하면 7일 안에 충돌할 확률</b> ${ep.length?Math.round(100*eh/ep.length):0}% (95% 구간 ${a2}~${b2}%) · 시점 중앙값 ${med}일<br><b class="mut">기준선 대비 ${(100*eh/ep.length/S.baseline.pct).toFixed(1)}배 · 미결</b> — 아무 날이나 찍었을 때 ${S.baseline.pct}%. 중국 경고는 대부분 말로 끝난다</div></div>
+  <div class="panel"><div class="n">${ev.length-w}</div><div class="l"><b>경고 없이 일어난 충돌</b> · 정례 보급 임무 중 충돌은 사전 경고 없이도 반복됨</div></div>`;
+  const x0=30,x1=890,base=202,t0=D("2024-02-01"),t1=D("2024-09-30"),X=d=>x0+(D(d)-t0)/(t1-t0)*(x1-x0);let s="",max=1,days=[];
+  for(let d=new Date(t0);d<=t1;d.setDate(d.getDate()+1)){const k=d.toISOString().slice(0,10);days.push(k);max=Math.max(max,S.daily[k]||0)}
+  const bw=(x1-x0)/days.length;days.forEach(k=>{const v=S.daily[k]||0,bh=v/max*(base-60);s+=`<rect x="${X(k)}" y="${base-bh}" width="${Math.max(bw-.5,1)}" height="${bh}" fill="#3a4452"/>`;if(k.endsWith("-01"))s+=`<text x="${X(k)}" y="${base+18}" font-size="11" fill="#8b95a4">${+k.slice(5,7)}월</text>`});
+  ep.forEach(e=>{const x=X(e.date);s+=`<path d="M${x-6},44 L${x+6},44 L${x},32 Z" fill="#f2643a"><title>${e.date} ${e.actor}</title></path>`;if(e.result)s+=`<line x1="${x}" y1="38" x2="${X(e.result.event)}" y2="38" stroke="#f2643a" opacity=".6"/>`});
+  ev.forEach(e=>{const x=X(e.date);s+=e.warned?`<circle cx="${x}" cy="56" r="5" fill="#4fbf8b"><title>${e.date} ${e.name}</title></circle>`:`<circle cx="${x}" cy="56" r="5" fill="none" stroke="#e04f5f" stroke-width="2"><title>${e.date} ${e.name} · 놓침 · ${e.src}</title></circle>`});
+  $("#seatl").innerHTML=s;
+  $("#seaeps").innerHTML=ep.slice().reverse().map(e=>`<div class="card" onclick="this.classList.toggle('open')"><h4>▲ ${e.date} · ${esc(e.actor)}</h4><span class="badge b-단일">원천 1 · 기사 ${e.n_articles}</span>${e.result?`<span class="badge b-다중">${e.result.lead}일 뒤 충돌 ${e.result.event.slice(5)}</span>`:`<span class="badge">7일 내 충돌 없음</span>`}<div class="more">${e.titles.map(t=>"· "+esc(t.title)).join("<br>")}</div></div>`).join("")+`<p class="src">정답지: ${ev.map(e=>e.date.slice(5)+" "+esc(e.name)+" ("+esc(e.src)+")").join(" · ")}</p>`;
+  window._sea={w,n:ev.length,eh,en:ep.length,lift:(100*eh/ep.length/S.baseline.pct).toFixed(1)};window._seaS=S;report();
+});
+// ---- 이란 봉수
+fetch("data/iran-data.json").then(r=>r.ok?r.json():null).then(I=>{
+  if(!I)return; const S=I.sides, nm={IR:"이란 → 이스라엘",IL:"이스라엘·미국 → 이란"};
+  $("#irScore").innerHTML=Object.entries(S).map(([k,s])=>{const ep=s.episodes,eh=ep.filter(e=>e.result).length,w=s.events.filter(e=>e.warned).length,p=ep.length?100*eh/ep.length:0,lift=s.baseline.pct?p/s.baseline.pct:0,[a,b]=wilson(eh,ep.length);
+    return `<div class="panel"><div class="n ${lift>=2?"ok":"miss"}">${eh}/${ep.length}</div><div class="l"><b>${nm[k]} 예고 후 7일 내 실행</b> ${Math.round(p)}% (95% 구간 ${a}~${b}%) · 기준선 ${s.baseline.pct}% → <b>${lift.toFixed(1)}배</b><br>공격 ${s.events.length}건 중 사전 경보 ${w}건</div></div>`}).join("")+
+    `<div class="panel"><div class="n warn">${(()=>{const P=I.brent,ds=Object.keys(P).sort();return "$"+P[ds[ds.length-1]].toFixed(0)})()}</div><div class="l"><b>브렌트유 최신</b> (FRED ${Object.keys(I.brent).sort().slice(-1)[0]})</div></div>`;
+  const P=I.brent, ds=Object.keys(P).sort();
+  $("#irCharts").innerHTML=I.periods.map((p,i)=>`<h3>${p[0]} ~ ${p[1]}</h3><div class="panel"><svg id="irc${i}" viewBox="0 0 900 240"></svg></div>`).join("")+`<div class="legend"><i>▮ 관련 영문 기사량</i><i style="color:#f2643a">▲ 이란 예고</i><i style="color:#5aa2e6">▲ 이스라엘·미국 예고</i><i class="ok">● 사전 경보된 공격</i><i class="miss">○ 놓친 공격</i><i style="color:#f2b33a">— 브렌트유</i></div>`;
+  I.periods.forEach((p,i)=>{const x0=40,x1=860,base=210,t0=D(p[0]),t1=D(p[1]),X=d=>x0+(D(d)-t0)/(t1-t0)*(x1-x0);let s="",max=1,days=[];
+    for(let d=new Date(t0);d<=t1;d.setDate(d.getDate()+1)){const k=d.toISOString().slice(0,10);days.push(k);max=Math.max(max,I.daily[k]||0)}
+    const bw=(x1-x0)/days.length;days.forEach(k=>{const v=I.daily[k]||0,bh=v/max*(base-90);s+=`<rect x="${X(k)}" y="${base-bh}" width="${Math.max(bw-.5,1)}" height="${bh}" fill="#3a4452"/>`;if(k.endsWith("-01"))s+=`<text x="${X(k)}" y="${base+18}" font-size="11" fill="#8b95a4">${k.slice(2,7)}</text>`});
+    const pd=ds.filter(d=>d>=p[0]&&d<=p[1]);if(pd.length){const lo=Math.min(...pd.map(d=>P[d])),hi=Math.max(...pd.map(d=>P[d])),Y=v=>base-20-(v-lo)/(hi-lo||1)*(base-100);
+      s+=`<polyline fill="none" stroke="#f2b33a" stroke-width="2" points="${pd.map(d=>X(d)+","+Y(P[d])).join(" ")}"/><text x="${x1+4}" y="${Y(P[pd[pd.length-1]])}" font-size="11" fill="#f2b33a">$${P[pd[pd.length-1]].toFixed(0)}</text><text x="${x0-36}" y="${Y(P[pd[0]])}" font-size="11" fill="#f2b33a">$${P[pd[0]].toFixed(0)}</text>`}
+    [["IR","#f2643a",30],["IL","#5aa2e6",50]].forEach(([k,c,y])=>{S[k].episodes.filter(e=>e.date>=p[0]&&e.date<=p[1]).forEach(e=>{const x=X(e.date);s+=`<path d="M${x-5},${y+10} L${x+5},${y+10} L${x},${y} Z" fill="${c}"><title>${e.date} ${esc(e.titles[0].title)}</title></path>`});
+      S[k].events.filter(e=>e.date>=p[0]&&e.date<=p[1]).forEach(e=>{const x=X(e.date);s+=e.warned?`<circle cx="${x}" cy="${y+22}" r="5" fill="#4fbf8b"><title>${e.date} ${e.name}</title></circle>`:`<circle cx="${x}" cy="${y+22}" r="5" fill="none" stroke="#e04f5f" stroke-width="2"><title>${e.date} ${e.name} · 놓침</title></circle>`})});
+    $("#irc"+i).innerHTML=s});
+  const near=(d,k)=>{const i=ds.findIndex(x=>x>=d);return ds[Math.max(0,Math.min(ds.length-1,i+k))]};
+  const rows=[...S.IR.events.map(e=>["이란",e]),...S.IL.events.map(e=>["이스라엘·미국",e])].sort((a,b)=>a[1].date<b[1].date?-1:1);
+  $("#irOil").innerHTML=`<table><tr><th>날짜</th><th>사건</th><th>당일</th><th>5일 뒤</th><th>20일 뒤</th></tr>${rows.map(([w,e])=>{const b=P[near(e.date,0)],c=P[near(e.date,5)],f=P[near(e.date,20)],pc=(x)=>`<span class="${x>=0?"ok":"miss"}">${x>=0?"+":""}${x.toFixed(1)}%</span>`;return `<tr><td>${e.date}</td><td>${w} · ${esc(e.name)}</td><td>$${b.toFixed(1)}</td><td>${pc(100*(c/b-1))}</td><td>${pc(100*(f/b-1))}</td></tr>`}).join("")}</table>
+  <p class="src">2024~2025년 사건 뒤 유가 상승은 20일 안에 되돌려졌다. 2026년은 걸프 산유국 타격·호르무즈 위기가 겹쳐 20일 +58%. 사례 수가 적어 규칙이 아니라 관찰이다.</p>`;
+  window._iran=S;window._iranPartial=I.partial;report();
+});
+// ---- 추세 봉수
+fetch("data/border-data.json").then(r=>r.ok?r.json():null).then(T=>{
+  if(!T){$("#bt").outerHTML='<p class="spin">추세 데이터 없음</p>';return}
+  const ks=T.keywords, cols=["#f2643a","#f2b33a","#5aa2e6"], M=T.months, x0=40,x1=890,base=225;
+  const max=Math.max(...ks.flatMap(k=>M.map(m=>T.series[k][m]||0)),1), X=i=>x0+i*(x1-x0)/(M.length-1), Y=v=>base-v/max*190;
+  let s=`<line x1="${x0}" y1="${base}" x2="${x1}" y2="${base}" stroke="#262d37"/>`;
+  M.forEach((m,i)=>{if(m.endsWith("-01")||m.endsWith("-07"))s+=`<text x="${X(i)-14}" y="${base+18}" font-size="11" fill="#8b95a4">${m.slice(2)}</text>`});
+  (T.marks||[]).forEach(mk=>{const i=M.indexOf(mk.month);if(i<0)return;s+=`<line x1="${X(i)}" y1="20" x2="${X(i)}" y2="${base}" stroke="${mk.color||"#e04f5f"}" stroke-dasharray="4 3"/><text x="${X(i)-4}" y="${14+(mk.row||0)*12}" font-size="10.5" fill="${mk.color||"#e04f5f"}" text-anchor="end">${esc(mk.label)}</text>`});
+  ks.forEach((k,j)=>{s+=`<polyline fill="none" stroke="${cols[j]}" stroke-width="2.2" points="${M.map((m,i)=>X(i)+","+Y(T.series[k][m]||0)).join(" ")}"/>`});
+  $("#bt").innerHTML=s;$("#btLegend").innerHTML=ks.map((k,j)=>`<i style="color:${cols[j]}">— ${esc(k)}</i>`).join("")+`<i>월별 기사 수(Google 뉴스, 상한 도달 달은 주 단위 합산)</i>`;
+  $("#btNote").innerHTML=`<ul>${T.notes.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>`;window._trend=T;report();
+});
+// ---- 기술 봉수 (NAIS식: 카드 목록 → 주제 화면)
+const TNAME={hypersonic:["극초음속","Hypersonic · scramjet"],drone_swarm:["드론 군집","Drone swarm"],counter_uas:["대드론","Counter-UAS"],laser_weapon:["레이저 무기","Directed energy"],ew:["전자전","Electronic warfare"]};
+const tsum=(t,c,a,b)=>((t.countries||{})[c]||[]).filter(p=>p.y>=a&&p.y<=b).reduce((s,p)=>s+p.n,0);
+const tpy=(t,a,b)=>((t.patents||{}).yearly||[]).filter(p=>p.y>=a&&p.y<=b).reduce((s,p)=>s+p.n,0);
+const TSTORY={counter_uas:t=>{const ke=(t.top_inst.early||[]).findIndex(i=>/Korea Advanced/.test(i.name))+1;return [`한국은 먼저 들어갔는데, 밀렸다`,`2016~20 KAIST 세계 기관 ${ke}위. 2021~25 논문은 중국 ${tsum(t,"CN",2016,2020)}→${tsum(t,"CN",2021,2025)}, 한국 ${tsum(t,"KR",2016,2020)}→${tsum(t,"KR",2021,2025)}`,["한국 선발","중국·인도 급증"]]},
+  hypersonic:t=>[`국내 특허가 약 6배로 늘었다`,`국내 특허 ${tpy(t,2016,2020)}→${tpy(t,2021,2025)}건. 논문은 중국 ${tsum(t,"CN",2021,2025)} vs 한국 ${tsum(t,"KR",2021,2025)}(2021~25)`,["국내 특허 급증","중국 압도"]],
+  drone_swarm:t=>[`중국이 판을 가져갔다`,`논문 2016년 ${(t.yearly.find(y=>y.y==2016)||{}).n}편 → 2025년 ${(t.yearly.find(y=>y.y==2025)||{}).n}편. 2021~25 중국 ${tsum(t,"CN",2021,2025)} · 한국 ${tsum(t,"KR",2021,2025)}`,["폭발적 성장","중국 집중"]],
+  laser_weapon:t=>[`국내는 원자력연·한화 계열이 이끈다`,`국내 특허 ${t.patents.total}건. 논문은 요청 한도로 미수집`,["특허만"]],
+  ew:t=>[`국내 특허는 정체, 국방과학연구소 중심`,`국내 특허 ${tpy(t,2016,2020)}→${tpy(t,2021,2025)}건. 국방과학연구소 ${(t.patents.top_applicants_org[0]||{}).n}건`,["특허만","정체"]]};
+const CC={CN:"#ff6b4a",US:"#5aa2e6",KR:"#3cc98a",IN:"#e3a94c",RU:"#b58cf2"};
+function spark(t,w=300,hgt=64){const C=t.countries||{},ys=(t.yearly||[]).map(y=>y.y);if(!ys.length||!Object.keys(C).length){const P=(t.patents.yearly||[]).filter(p=>p.y>=2010),mx=Math.max(1,...P.map(p=>p.n));return `<svg viewBox="0 0 ${w} ${hgt}">${P.map((p,i)=>`<rect x="${i*(w/P.length)}" y="${hgt-p.n/mx*(hgt-6)}" width="${w/P.length-2}" height="${p.n/mx*(hgt-6)}" fill="#9b8cff" opacity=".6"/>`).join("")}</svg>`}
+  const mx=Math.max(1,...Object.values(C).flatMap(a=>a.map(p=>p.n))),X=y=>(y-ys[0])/(ys[ys.length-1]-ys[0])*(w-4)+2,Y=v=>hgt-4-v/mx*(hgt-8);
+  return `<svg viewBox="0 0 ${w} ${hgt}">${["CN","US","IN","RU","KR"].filter(c=>C[c]).map(c=>`<polyline fill="none" stroke="${CC[c]}" stroke-width="${c=="KR"||c=="CN"?2.2:1.2}" opacity="${c=="KR"||c=="CN"?1:.5}" points="${C[c].map(p=>X(p.y)+","+Y(p.n)).join(" ")}"/>`).join("")}</svg>`}
+function techCards(T){$("#tcards").innerHTML=["counter_uas","hypersonic","drone_swarm","laser_weapon","ew"].map(k=>{const t=T.techs.find(x=>x.key==k);if(!t)return"";const [hd,ds,tags]=TSTORY[k](t),bt=t.backtest||{},ct=bt.control||{},pOnly=!!t.incomplete;
+  const res=pOnly?`<div class="res mute">논문 미수집 · 특허만</div>`:`<div class="res ${bt.hits/bt.total>(ct.total?ct.hits/ct.total:0)?"ok":"no"}">이 방법 적중 ${bt.hits}/${bt.total} · 대조 ${ct.hits}/${ct.total}</div>`;
+  return `<div class="tc" onclick="techTopic('${k}')"><div class="tch"><div><div class="nm">${TNAME[k][0]}</div><div class="en">${TNAME[k][1]}</div></div><div class="tcs">${pOnly?"":`<div><b>${tsum(t,"KR",2021,2025)}</b><span>한국 논문 21~25</span></div>`}<div><b>${tpy(t,2021,2025)}</b><span>국내 특허 21~25</span></div></div></div>
+   ${spark(t)}<div class="hl">${hd}</div><div class="ds">${ds}</div><div class="tags">${tags.map(x=>`<span>${x}</span>`).join("")}</div>${res}<div class="more">자세히 →</div></div>`}).join("")}
+let TECH=null;
+function techTopic(k){const t=TECH.techs.find(x=>x.key==k);if(!t)return;$("#techList").hidden=true;const el=$("#techTopic");el.hidden=false;scrollTo(0,0);
+  const [hd,ds]=TSTORY[k](t),bt=t.backtest||{},ct=bt.control||{},pOnly=!!t.incomplete,kr=t.kr_inst||{},ti=t.top_inst||{};
+  const kpi=(l,v,s)=>`<div class="kpi"><div class="kl">${l}</div><div class="kv">${v}</div><div class="ks">${s}</div></div>`;
+  const big=(w,hg)=>{const C=t.countries||{},ys=(t.yearly||[]).map(y=>y.y);if(!ys.length)return"";const mx=Math.max(1,...Object.values(C).flatMap(a=>a.map(p=>p.n))),X=y=>40+(y-ys[0])/(ys[ys.length-1]-ys[0])*(w-110),Y=v=>hg-24-v/mx*(hg-40);
+    return `<svg viewBox="0 0 ${w} ${hg}">${ys.filter(y=>y%2==0).map(y=>`<text x="${X(y)-12}" y="${hg-6}" font-size="11" fill="#888">${y}</text>`).join("")}${Object.entries(C).map(([c,a])=>`<polyline fill="none" stroke="${CC[c]}" stroke-width="2.4" points="${a.map(p=>X(p.y)+","+Y(p.n)).join(" ")}"/><text x="${X(a[a.length-1].y)+4}" y="${Y(a[a.length-1].n)+4}" font-size="12" font-weight="700" fill="${CC[c]}">${c} ${a[a.length-1].n}</text>`).join("")}</svg>`};
+  const inst=(arr)=>`<table>${(arr||[]).slice(0,8).map((i,n)=>`<tr><td class="mut">${n+1}</td><td>${esc(i.name)}</td><td><b>${i.n}</b></td></tr>`).join("")}</table>`;
+  const TABS=[["flow","흐름"],["org","기관"],["pat","특허"],["chk","검증"]];
+  el.innerHTML=`<button class="back" onclick="$('#techTopic').hidden=true;$('#techList').hidden=false">← 기술 목록</button>
+   <div class="eyebrow">기술 봉수 · ${TNAME[k][1]}</div><div class="sumt">${TNAME[k][0]}</div><div class="lead2">${hd} — ${ds}</div>
+   <div class="kpis">${pOnly?kpi("논문","미수집","OpenAlex 요청 한도"):kpi("논문 2016 → 2025",`${(t.yearly.find(y=>y.y==2016)||{}).n} → ${(t.yearly.find(y=>y.y==2025)||{}).n}`,"2025 색인 지연 가능")}
+     ${pOnly?"":kpi("중국 21~25",tsum(t,"CN",2021,2025),`2016~20 ${tsum(t,"CN",2016,2020)}`)}${pOnly?"":kpi("한국 21~25",tsum(t,"KR",2021,2025),`2016~20 ${tsum(t,"KR",2016,2020)}`)}
+     ${kpi("국내 특허 21~25",tpy(t,2021,2025),`2016~20 ${tpy(t,2016,2020)} · 총 ${t.patents.total}`)}</div>
+   <div class="tabs2">${TABS.map(([id,l],i)=>`<button data-p="${id}" class="${i==0?"on":""}">${l}</button>`).join("")}</div>
+   <div class="pane2 on" id="p-flow"><div class="panel">${pOnly?'<p class="fine">논문 데이터 미수집 — 특허 탭을 보세요</p>':big(900,300)}</div></div>
+   <div class="pane2" id="p-org"><div class="grid2" style="grid-template-columns:1fr 1fr"><div class="panel"><h3 style="margin-top:0">세계 상위 기관 2016~20</h3>${inst(ti.early)}</div><div class="panel"><h3 style="margin-top:0">세계 상위 기관 2021~25</h3>${inst(ti.late)}</div>
+     <div class="panel"><h3 style="margin-top:0">한국 기관 2016~20</h3>${inst(kr.early)}</div><div class="panel"><h3 style="margin-top:0">한국 기관 2021~25</h3>${inst(kr.late)}<p class="fine">한국 논문의 해외 공저 기관이 섞일 수 있음</p></div></div></div>
+   <div class="pane2" id="p-pat"><div class="panel"><h3 style="margin-top:0">국내 특허 연도별 (발명명칭 검색)</h3>${spark({patents:t.patents,countries:{},yearly:[]},900,120)}<h3>상위 기관 출원인</h3>${inst(t.patents.top_applicants_org)}<p class="fine">출원 후 18개월 뒤 공개 → 2025~26년은 적게 잡힘 · 이름 바뀐 출원인 미병합</p></div></div>
+   <div class="pane2" id="p-chk"><div class="panel">${pOnly?'<p class="fine">논문 미수집이라 채점하지 않음</p>':`<div class="vrow"><div class="vbox ${bt.hits/bt.total>(ct.hits/ct.total)?"ok":"no"}"><span>이 방법이 '뜬다'고 고른 쪽</span><b>${bt.hits}/${bt.total}</b><em>2021~25에도 계속 늘었다</em></div><div class="vbox"><span>고르지 않은 쪽 (대조군)</span><b>${ct.hits}/${ct.total}</b><em>2021~25에도 계속 늘었다</em></div></div>
+     <p class="lead2" style="margin-top:12px">${bt.hits/bt.total>(ct.hits/ct.total)+.2?"고른 쪽이 확실히 더 많이 늘었다 — 이 기술에서는 방법이 통했다.":bt.hits/bt.total>(ct.hits/ct.total)?"차이가 작다 — 표본이 적어 결론 보류.":"고른 쪽이 오히려 덜 늘었다 — 이 기술에서는 방법이 통하지 않았다."}</p>
+     <details class="srcd"><summary>판정 대상 ${(bt.calls||[]).length}개 보기</summary><table>${(bt.calls||[]).map(c=>`<tr><td>${esc(c.entity)}</td><td>2016~20 ×${c.early_growth??"–"}</td><td>2021~25 ×${c.late_growth??"–"}</td><td class="${c.hit?"ok":"miss"}">${c.hit?"계속 늘었다":"꺾였다"}</td></tr>`).join("")}</table><p class="fine">${esc(bt.rule||"")}</p></details>`}</div></div>`;
+  el.querySelectorAll(".tabs2 button").forEach(b=>b.onclick=()=>{el.querySelectorAll(".tabs2 button").forEach(x=>x.classList.toggle("on",x==b));el.querySelectorAll(".pane2").forEach(p=>p.classList.toggle("on",p.id=="p-"+b.dataset.p))})}
+fetch("data/tech-data.json").then(r=>r.ok?r.json():null).then(T=>{if(!T)return;TECH=T;techCards(T);window._tech=T;report();const m=location.hash.match(/^#tech\/(\w+)/);if(m){openTab("tech");techTopic(m[1])}});
+function liftChart(){
+  const pts=[];const B=window._tacB,S=window._seaS,I=window._iran;
+  if(B){const ep=B.episodes,eh=ep.filter(e=>e.result).length;pts.push({id:"tac",name:"북한 (풍선 예고)",k:eh,n:ep.length,base:B.baseline.pct,miss:B.events.filter(e=>!e.warned).length,ev:B.events.length})}
+  if(S){const ep=S.episodes,eh=ep.filter(e=>e.result).length;pts.push({id:"sea",name:"중국 해경·정부 (남중국해 경고)",k:eh,n:ep.length,base:S.baseline.pct,miss:S.events.filter(e=>!e.warned).length,ev:S.events.length})}
+  const part=window._iranPartial?" · 부분 데이터(수집 중)":"";
+  if(I&&window._iranPartial)window._iranPending=true;
+  if(I&&!window._iranPartial){[["IR","이란 (보복 예고)"],["IL","이스라엘·미국 (타격 예고)"]].forEach(([k,nm])=>{const s=I[k],ep=s.episodes;if(!ep.length)return;const eh=ep.filter(e=>e.result).length;pts.push({id:"iran",name:nm+part,k:eh,n:ep.length,base:s.baseline.pct,miss:s.events.filter(e=>!e.warned).length,ev:s.events.length})})}
+  if(!pts.length)return;
+  const x0=260,x1=860,maxL=Math.max(8,...pts.map(p=>{const[a,b]=wilson(p.k,p.n);return b/p.base})),X=v=>x0+v/maxL*(x1-x0),rh=56;let s="";
+  [1,2,4,6,8].filter(v=>v<=maxL).forEach(v=>{s+=`<line x1="${X(v)}" y1="20" x2="${X(v)}" y2="${30+pts.length*rh}" stroke="${v==1?"#8b95a4":"#262d37"}" ${v==1?'stroke-dasharray="4 3"':""}/><text x="${X(v)-6}" y="14" font-size="11" fill="#8b95a4">${v}배</text>`});
+  s+=`<text x="${X(1)+4}" y="${42+pts.length*rh}" font-size="11" fill="#8b95a4">기준선(1배) = 말이 행동을 예측 못 함</text>`;
+  pts.forEach(p=>{const[a,b]=wilson(p.k,p.n);p.lo=a/p.base;p.hi=b/p.base;p.l=100*p.k/p.n/p.base;p.v=p.lo>1?"신호":p.hi<1?"역신호":"미결"});
+  pts.forEach((p,i)=>{const y=50+i*rh,l=p.l,a=p.lo*p.base,b=p.hi*p.base,c=p.v=="신호"?"#4fbf8b":"#8b95a4";
+    s+=`<g style="cursor:pointer" onclick="openTab('${p.id}');scrollTo(0,0)"><text x="10" y="${y+4}" font-size="14" fill="#e1e5ea">${p.name}</text><text x="10" y="${y+20}" font-size="11" fill="#8b95a4">예고 ${p.n}묶음 중 ${p.k} 실행 · 기준선 ${p.base}%</text>
+    <line x1="${X(a/p.base)}" y1="${y}" x2="${X(b/p.base)}" y2="${y}" stroke="${c}" stroke-width="3" opacity=".35"/><circle cx="${X(l)}" cy="${y}" r="9" fill="${c}"/><text x="${X(l)+14}" y="${y+5}" font-size="15" font-weight="800" fill="${c}">${l.toFixed(1)}배 · ${p.v}</text></g>`});
+  $("#lift").setAttribute("viewBox",`0 0 900 ${60+pts.length*rh}`);$("#lift").innerHTML=s;
+  $("#liftNote").innerHTML="선 = 95% 구간(Wilson) ÷ 기준선. <b>판정 원칙</b>: 구간 하한이 1배를 넘으면 <span class='ok'>신호</span>, 1배를 걸치면 <span class='mut'>미결</span>(기준선과 구별 안 됨)."+(window._iranPending?" 이란: 수집 중 — 표본이 차기 전엔 판정하지 않음.":"");
+  const sig=pts.filter(p=>p.v=="신호").map(p=>p.name.split(" ")[0]),und=pts.filter(p=>p.v!="신호").map(p=>p.name.split(" (")[0]);
+  $("#liftConc").innerHTML=`<b>결론</b> · ${sig.join("·")||"—"}의 예고는 <span class="ok">신호</span>다. ${und.length?und.join("·")+"의 경고는 기준선과 구별되지 않는다 → 이 주체에는 말이 아닌 다른 계열(해상은 AIS 항적·위성)이 필요하다.":""}`;
+  $("#liftCards").innerHTML=pts.map(p=>`<div class="panel" style="cursor:pointer" onclick="openTab('${p.id}');scrollTo(0,0)"><b>${p.name}</b><div class="src">사건 ${p.ev}건 중 예고 없이 일어난 것 ${p.miss}건 — 이 주체에 대해선 말 아닌 다른 계열이 필요</div></div>`).join("");
+}
+// ---- 지식 그래프 (온톨로지) — 지도·답과 연동
+function rebuildKG(){if(!window.d3)return;d3.select("#kg").selectAll("*").remove();KG=null;buildKG();if(QREG)kgRegion(QREG);else kgRegion("korea")}
+document.addEventListener("click",e=>{if(e.target.id!="kgbig")return;const p=document.querySelector(".fp.right"),w=p.classList.toggle("wide");e.target.textContent=w?"⤡ 작게":"⤢ 크게 보기";
+  document.querySelectorAll("#kg text").forEach(t=>t.style.display="");setTimeout(rebuildKG,60)});
+let KG=null;
+function buildKG(){const B=window._tacB,S=window._seaS,I=window._iran;if(!B||!S||KG||!window.d3)return;
+  const N=[],E=[],id={},add=(k,o)=>{if(!id[k]){id[k]=o;o.id=k;N.push(o)}return k},link=(a,b)=>E.push({source:a,target:b});
+  const src={korea:add("src:합참",{t:"src",l:"합참 발표",r:"korea"}),scs:add("src:필리핀",{t:"src",l:"필리핀 정부 발표",r:"scs"}),me:add("src:공식",{t:"src",l:"공식 발표 인용 보도",r:"me"})};
+  const actor=(r,a)=>add("a:"+a,{t:"actor",l:a.replace("북한(주체 미상)","북한").replace("중국(주체 미상)","중국"),r});
+  const ev=(r,e,nm)=>{const k=add("e:"+r+e.date,{t:e.warned?"evw":"evm",l:e.date.slice(2)+" "+nm,r,d:e.date,n:nm,w:e.warned});const pl=placeFor(r,nm);link(k,add("p:"+pl,{t:"place",l:pl,r}));link(k,src[r]);return k};
+  B.events.forEach(e=>ev("korea",e,e.name));S.events.forEach(e=>ev("scs",e,e.name));
+  [[B.episodes,"korea"],[S.episodes,"scs"]].forEach(([eps,r])=>eps.forEach(e=>{const k=add("w:"+r+e.date+e.actor,{t:"warn",l:"예고 "+e.date.slice(5),r,d:e.date,n:e.titles[0].title});link(actor(r,e.actor),k);if(e.result)link(k,"e:"+r+e.result.event)}));
+  if(I&&!window._iranPartial){["IR","IL"].forEach(s=>{I[s].events.forEach(e=>ev("me",e,(s=="IR"?"이란 ":"")+e.name));I[s].episodes.forEach(e=>{const k=add("w:me"+s+e.date,{t:"warn",l:"예고 "+e.date.slice(5),r:"me",d:e.date,n:e.titles[0].title});link(actor("me",s=="IR"?"이란":"이스라엘·미국"),k);if(e.result)link(k,"e:me"+e.result.event)})})}
+  else{const k=add("e:me-pending",{t:"place",l:"이란 (수집 중)",r:"me"});link(k,src.me)}
+  const N10=window._nk10;
+  if(N10&&N10.strict){const csis=add("src:csis",{t:"src",l:"CSIS 도발 DB",r:"korea"});const K10={};(N10.onsets||[]).forEach(o=>K10[o.anchor]=o.kind);
+    const who=t=>/김정은/.test(t)?"김정은":/김여정/.test(t)?"김여정":/외무성/.test(t)?"외무성":/국방성|국방상|인민무력/.test(t)?"국방성":/총참모부/.test(t)?"총참모부":"북한(주체 미상)";
+    N10.strict.onsets.forEach(o=>{const kd=K10[o.anchor]||"기타",ty=add("p:유형:"+kd,{t:"place",l:kd+" (유형)",r:"korea"});
+      const ek=add("e:nk10:"+o.anchor,{t:o.warned?"evw":"evm",l:o.anchor.slice(2)+" "+(o.event||kd),r:"korea",d:o.anchor,n:(o.event||kd)+(o.warned?" — 경고 "+o.lead.join("·")+"일 전":" — 경고 없음")});
+      link(ek,ty);link(ek,csis);
+      if(o.warned){const wk=add("w:nk10:"+o.anchor,{t:"warn",l:"경고 "+o.anchor.slice(5),r:"korea",d:o.anchor,n:o.titles[0]});link(actor("korea",who(o.titles.join(" "))),wk);link(wk,ek)}})}
+  const add2=(a,b,t,l)=>{link(add(a,{t:"place",l:b,r:"korea"}),add(t,{t:"evm",l,r:"korea",n:l}))};
+  add2("p:서부전선 DMZ","서부전선 DMZ","e:mine","26-09-21 DMZ 지뢰 폭발");link("e:mine",src.korea);link("e:mine",add("p:동부전선 MDL",{t:"place",l:"동부전선 MDL",r:"korea"}));
+  const col={actor:"#9b8cff",warn:"#ff6b4a",evw:"#3cc98a",evm:"#ff6b6b",place:"#e3a94c",src:"#5aa2e6"},rad={actor:9,warn:3.5,evw:4.5,evm:4.5,place:8,src:8};
+  const svg=d3.select("#kg"),W=$("#kg").clientWidth||360,H=$("#kg").clientHeight||250;svg.attr("viewBox",[0,0,W,H]);
+  const wideG=!!document.querySelector(".fp.right.wide");
+  N.forEach((d,i)=>{const a=i*2.399,r=10+Math.sqrt(i)*(wideG?14:6);d.x=W/2+Math.cos(a)*r;d.y=H/2+Math.sin(a)*r});
+  const sim=d3.forceSimulation(N).force("link",d3.forceLink(E).id(d=>d.id).distance(d=>(d.source.t=="actor"?38:30)*(wideG?2.2:1)).strength(.6)).force("charge",d3.forceManyBody().strength(wideG?-90:-28))
+    .force("x",d3.forceX(W/2).strength(.06)).force("y",d3.forceY(H/2).strength(.08)).force("col",d3.forceCollide(d=>rad[d.t]+2));
+  const ln=svg.append("g").selectAll("line").data(E).join("line");
+  const nd=svg.append("g").selectAll("g").data(N).join("g").attr("class","n").call(d3.drag().on("start",(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y}).on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y}).on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=d.fy=null}));
+  nd.append("circle").attr("r",d=>rad[d.t]).attr("fill",d=>col[d.t]).attr("fill-opacity",.85);
+  const wide=document.querySelector(".fp.right.wide");
+  nd.filter(d=>["actor","place","src"].includes(d.t)).append("text").attr("x",d=>rad[d.t]+3).attr("y",3).text(d=>d.l);
+  nd.on("mousemove",(e,d)=>{const t=$("#kgtip");t.style.display="block";t.style.left=e.clientX+12+"px";t.style.top=e.clientY+12+"px";t.innerHTML=`<b>${esc(d.l)}</b>${d.n&&d.n!=d.l?"<br>"+esc(d.n):""}`}).on("mouseleave",()=>$("#kgtip").style.display="none")
+    .on("click",(e,d)=>{kgFocus(d.id);if(d.t=="place"&&MK[d.l]){goRegion(d.r);setTimeout(()=>{MAP.flyTo(MK[d.l].m.getLatLng(),6);MK[d.l].m.openTooltip()},600)}else if(d.d&&(d.t=="evw"||d.t=="evm")){const t=TIMELINE.find(x=>x.d==d.d&&x.r==d.r);if(t){goRegion(d.r);setTimeout(()=>showEvent(t),600)}}else goRegion(d.r)});
+  sim.stop();for(let i=0;i<300;i++)sim.tick();sim.alpha(.05).restart();
+  sim.on("tick",()=>{N.forEach(d=>{d.x=Math.max(12,Math.min(W-12,d.x));d.y=Math.max(12,Math.min(H-12,d.y))});ln.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);nd.attr("transform",d=>`translate(${d.x},${d.y})`)});
+  KG={N,E,nd,ln,sim}}
+function kgFocus(nodeId){if(!KG)return;const keep=new Set([nodeId]);KG.E.forEach(e=>{if(e.source.id==nodeId)keep.add(e.target.id);if(e.target.id==nodeId)keep.add(e.source.id)});
+  KG.nd.classed("hot",d=>d.id==nodeId).classed("dim",d=>!keep.has(d.id));KG.ln.classed("hot",e=>e.source.id==nodeId||e.target.id==nodeId).classed("dim",e=>!(e.source.id==nodeId||e.target.id==nodeId))}
+function kgRegion(r){if(!KG)return;KG.nd.style("display",d=>d.r==r?null:"none").classed("hot",false).classed("dim",false);KG.ln.style("display",e=>e.source.r==r&&e.target.r==r?null:"none").classed("hot",false).classed("dim",false);
+  KG.sim.nodes(KG.N.filter(d=>d.r==r));KG.sim.force("link").links(KG.E.filter(e=>e.source.r==r&&e.target.r==r));KG.sim.alpha(.9).restart()}
+function kgAnswer(text){if(!KG)return;const hit=new Set();KG.N.forEach(d=>{const key=(d.l||"").replace("예고 ","").split(" ")[0];if((d.t=="actor"||d.t=="place"||d.t=="src")&&text.includes(d.l.split(" ")[0]))hit.add(d.id);if(d.d&&text.includes(d.d.slice(5).replace("-","/").replace(/^0/,"")))hit.add(d.id)});
+  KG.nd.classed("hot",d=>hit.has(d.id)).classed("dim",d=>!hit.has(d.id)&&!(QREG&&d.r==QREG));KG.ln.classed("hot",e=>hit.has(e.source.id)&&hit.has(e.target.id)).classed("dim",e=>!(hit.has(e.source.id)||hit.has(e.target.id)))}
+function strip(){const B=window._tacB,S=window._seaS;let s="";
+  if(window._nk10){const t=window._nk10.strict;s+=`<a onclick="document.querySelectorAll('.chip')[1].click()"><b class="ok">${t.lr}배</b><span>북한 경고 → 도발 (10년, 114건)<br><span class="src">경고 없던 도발 ${t.hit[1]-t.hit[0]}건 · 신호</span></span></a>`}
+  if(B){const ep=B.episodes,eh=ep.filter(e=>e.result).length;s+=`<a onclick="document.querySelectorAll('.chip')[3].click()"><b class="ok">${(100*eh/ep.length/B.baseline.pct).toFixed(1)}배</b><span>북한 예고 → 실행<br><span class="src">신호</span></span></a>`}
+  if(S){const ep=S.episodes,eh=ep.filter(e=>e.result).length;s+=`<a onclick="document.querySelectorAll('.chip')[4].click()"><b style="color:var(--mut)">${(100*eh/ep.length/S.baseline.pct).toFixed(1)}배</b><span>중국 해경 경고 → 충돌<br><span class="src">미결</span></span></a>`}
+$("#strip").innerHTML=s}
+function report(){
+  strip();liftChart();if(!document.body.classList.contains("home"))buildKG();
+  const t=window._tac,T=window._trend,K=window._tech;let rows=[];
+  if(t)rows.push(["전술 봉수 · 예고형(개발)",`${t.dev.filter(e=>e.warned).length}/${t.dev.length} 사전 경보`,"규칙을 고른 기간 — 할인해서 볼 것"],["전술 봉수 · 예고 없는 재개(시험)",`${t.tst.filter(e=>e.warned).length}/${t.tst.length}`,"공개 뉴스에 전조 없음 — 이 방식의 한계"],["전술 봉수 · 대조 2023",`오경보 ${t.fa}`,"위협 발언이 모두 실행되진 않는다"]);
+  if(window._sea){const s=window._sea;rows.push(["해상 봉수 · 남중국해(규칙 고정 후 적용)",`${s.w}/${s.n} 사전 경보 · 경고 후 실행 ${s.eh}/${s.en} (기준선 대비 ${s.lift}배)`,"북한 예고 6배 vs 중국 경고 1.4배 — 같은 엔진이 신호와 소음을 가른다"])}
+  if(window._iran){const S=window._iran;["IR","IL"].forEach(k=>{const s=S[k],ep=s.episodes,eh=ep.filter(e=>e.result).length,p=ep.length?100*eh/ep.length:0;rows.push([`이란 봉수 · ${k=="IR"?"이란 예고":"이스라엘·미국 예고"}`,`${eh}/${ep.length} (기준선 대비 ${s.baseline.pct?(p/s.baseline.pct).toFixed(1):"–"}배)`,`공격 ${s.events.length}건 중 사전 경보 ${s.events.filter(e=>e.warned).length}`])})}
+  if(T)rows.push(["추세 봉수 · 지뢰 폭발",T.verdict||"—","사건 1건 — 증명이 아니라 사례"]);
+  if(K){let h=0,n=0;K.techs.forEach(x=>{h+=x.backtest?.hits||0;n+=x.backtest?.total||0});{let ch=0,cn=0;K.techs.forEach(x=>{ch+=x.backtest?.control?.hits||0;cn+=x.backtest?.control?.total||0});rows.push(["기술 봉수 · 뜨는 국가·기관 판정",`${h}/${n} 적중 · 대조군 ${ch}/${cn}`,K.verdict||""])}}
+  rows.push(["두 번째 계열 시험","실패 2","풍향 · 남측 단체 살포 보도 — 둘 다 효과 없음"]);
+  rows.push(["코파일럿 검증자 · 심은 오류","2/2 탐지","증거에 있는 숫자를 다른 맥락에 붙인 문장(300명·7건 중 9건)까지 잡음. 검증자 오류 시 '미검증' 표시"]);
+  $("#report").innerHTML=`<table><tr><th>시험</th><th>결과</th><th>해석</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td class="src">${r[2]}</td></tr>`).join("")}</table>`;
+}
+</script>
+<div id="kgtip"></div>
+</body>
+</html>
