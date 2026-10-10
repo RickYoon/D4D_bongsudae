@@ -1,4 +1,4 @@
-# 🔥 봉수대 (Bongsudae) — 위험을 미리 파악할 순 없을까?
+# 🔥 봉수대 — 온톨로지를 활용한 북한의 말과 도발을 잇는 조기경보
 
 D4D × EDTH Korean Defense Tech Hackathon 2026 · **T2 OSINT**
 
