@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>봉수대 — D4D x EDTH T2 OSINT</title>
+<style>
+:root{
+  --ink:#12293f; --ink2:#1d3c58; --sub:#6b7885; --line:#dfe5ea;
+  --acc:#12707f; --acc-bg:#e8f3f5;
+  --red:#a82c38; --red-bg:#fbeef0;
+  --amb:#a15c12; --amb-bg:#fdf3e6;
+  --grn:#1b6b4b; --grn-bg:#e9f4ef;
+  --panel:#f5f7f9; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#e9edf1; color:var(--ink); -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+.deck{scroll-snap-type:y mandatory; overflow-y:auto; height:100vh}
+.slide{
+  position:relative; width:1280px; height:720px; margin:22px auto; background:var(--white);
+  box-shadow:0 2px 18px rgba(18,41,63,.13); scroll-snap-align:center;
+  padding:46px 54px 44px; display:flex; flex-direction:column; overflow:hidden;
+}
+.stag{font-size:12px;font-weight:800;color:var(--acc);letter-spacing:.06em;margin-bottom:8px}
+.stitle{font-size:31px;font-weight:800;line-height:1.15;letter-spacing:-.02em}
+.ssub{font-size:14px;color:var(--sub);margin-top:9px;line-height:1.4}
+.rule{height:1px;background:var(--line);margin:18px 0 20px}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+.body.hassrc{padding-bottom:74px}
+.pno{position:absolute;right:54px;bottom:22px;font-size:11px;color:#a9b3bc;font-weight:700}
+.foot{position:absolute;left:54px;bottom:22px;font-size:11px;color:#a9b3bc}
+
+/* cover */
+.cover{background:var(--ink);color:#fff;justify-content:center}
+.cover .kick{font-size:14px;font-weight:800;color:#7fb9cc;letter-spacing:.06em;margin-bottom:26px}
+.cover h1{font-size:58px;font-weight:800;line-height:1.12;letter-spacing:-.03em}
+.cover h1 em{font-style:normal;color:#8fc0d4}
+.cover .meta{margin-top:34px;font-size:16px;color:#c3d2dd;line-height:1.7}
+.cover .bar{width:64px;height:5px;background:#4f9cb4;margin-bottom:30px}
+.cover .who{position:absolute;left:54px;bottom:44px;font-size:14px;color:#7fb9cc}
+
+/* divider */
+.divider{background:var(--ink);color:#fff;justify-content:center}
+.divider .n{font-size:15px;font-weight:800;color:#7fb9cc;letter-spacing:.1em}
+.divider h2{font-size:46px;font-weight:800;margin-top:14px;letter-spacing:-.02em}
+.divider p{font-size:17px;color:#b8cad7;margin-top:16px}
+
+/* layout helpers */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.gauto{display:grid;gap:16px}
+.row{display:flex;gap:16px}
+.row>*{min-width:0}
+.row svg{max-width:100%}
+.fill{flex:1;min-height:0}
+.mt{margin-top:16px}.mt2{margin-top:17px}.mtA{margin-top:auto}
+
+/* cards */
+.card{background:var(--panel);border-radius:8px;padding:16px 18px;border-top:4px solid var(--acc)}
+.card.ink{border-top-color:var(--ink)}
+.card.red{border-top-color:var(--red);background:var(--red-bg)}
+.card.grn{border-top-color:var(--grn);background:var(--grn-bg)}
+.card.amb{border-top-color:var(--amb);background:var(--amb-bg)}
+.card h4{font-size:15px;font-weight:800;margin-bottom:9px}
+.card .dt{font-size:11px;color:var(--acc);font-weight:800;margin-bottom:6px}
+.card ul{list-style:none}
+.card li{font-size:12.5px;color:#42525f;line-height:1.45;padding-left:11px;position:relative;margin-bottom:6px}
+.card li:before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--acc)}
+.card.red li:before{background:var(--red)} .card.grn li:before{background:var(--grn)}
+.card.amb li:before{background:var(--amb)} .card.ink li:before{background:var(--ink)}
+.card li b{color:var(--ink);font-weight:700}
+
+/* kpi */
+.kpi{background:var(--panel);border-radius:8px;padding:12px 15px}
+.kpi .n{font-size:33px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.kpi .l{font-size:11.5px;color:var(--sub);margin-top:7px;line-height:1.35}
+.kpi.hi .n{color:var(--acc)} .kpi.rd .n{color:var(--red)}
+
+/* table */
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{background:var(--ink);color:#fff;font-weight:700;text-align:left;padding:9px 11px;font-size:12.5px}
+table.t td{padding:9px 11px;border-bottom:1px solid var(--line);line-height:1.35;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fafbfc}
+table.t td.c,table.t th.c{text-align:center}
+table.t td b{font-weight:700}
+.tred{color:var(--red);font-weight:700} .tgrn{color:var(--grn);font-weight:700}
+.tamb{color:var(--amb);font-weight:700} .tsub{color:var(--sub)}
+table.t tr.hl td{background:var(--red-bg)!important}
+table.t tr.hy td{background:var(--amb-bg)!important}
+table.t tr.hy td:first-child{box-shadow:inset 3px 0 0 var(--amb)}
+
+/* punch */
+.punch{display:flex;align-items:center;gap:14px;margin-top:auto;padding-top:14px}
+.punch .b{width:5px;align-self:stretch;min-height:34px;background:var(--acc);border-radius:2px}
+.punch p{font-size:18px;font-weight:800;line-height:1.35;letter-spacing:-.02em}
+.punch.red .b{background:var(--red)} .punch.red p{color:var(--red)}
+.punch .s{font-size:13px;font-weight:500;color:var(--sub);display:block;margin-top:5px}
+.note{font-size:11px;color:var(--sub);margin-top:10px}
+.note.w{color:var(--amb)}
+
+/* badges */
+.bd{display:inline-block;padding:3px 9px;border-radius:11px;font-size:11px;font-weight:800}
+.bd.g{background:var(--grn-bg);color:var(--grn)} .bd.a{background:var(--amb-bg);color:var(--amb)}
+.bd.r{background:var(--red-bg);color:var(--red)} .bd.c{background:var(--acc-bg);color:var(--acc)}
+.bd.k{background:#e7ebef;color:var(--ink)}
+
+/* ladder infographic */
+.ladder{display:flex;align-items:flex-end;gap:10px;height:210px}
+.lstep{flex:1;border-radius:7px 7px 0 0;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:11px 10px;color:#fff;position:relative}
+.lstep .lb{font-size:13px;font-weight:800}
+.lstep .who{font-size:10.5px;opacity:.92;margin-top:5px;line-height:1.35}
+/* process bars */
+.pbar{display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.pbar .nm{width:170px;font-size:12.5px;font-weight:600;text-align:right}
+.pbar .tr{flex:1;height:20px;background:#eef1f4;border-radius:4px;overflow:hidden}
+.pbar .fl{height:100%;background:var(--ink);border-radius:4px}
+.pbar .vl{width:26px;font-size:12.5px;font-weight:800}
+.pbar.rd .nm{color:var(--red)} .pbar.rd .fl{background:var(--red)} .pbar.rd .vl{color:var(--red)}
+
+/* grid heatmap */
+.hm{display:grid;grid-template-columns:190px repeat(5,1fr);gap:4px;font-size:12px}
+.hm div{padding:8px 6px;text-align:center;border-radius:4px;background:#f2f5f7}
+.hm .hd{background:var(--ink);color:#fff;font-weight:700;font-size:11.5px}
+.hm .rw{text-align:left;font-weight:600;background:#fff;padding-left:2px}
+.hm .c4{background:#12707f;color:#fff;font-weight:800}
+.hm .c3{background:#7fb3bd;color:#fff}
+.hm .c2{background:#cfe0e4}
+.hm .c1{background:#f2f5f7;color:#b6bfc7}
+.hm .cx{background:var(--red);color:#fff;font-weight:800}
+.hm .rwr{text-align:left;font-weight:800;background:var(--red-bg);color:var(--red);padding-left:2px}
+
+/* steps flow */
+.flow{display:flex;gap:0;align-items:stretch}
+.fstep{flex:1;background:var(--panel);padding:16px 16px 16px 20px;position:relative;border-left:4px solid var(--acc)}
+.fstep:not(:last-child){margin-right:14px}
+.fstep .fn{font-size:22px;font-weight:800;color:var(--acc);line-height:1}
+.fstep h5{font-size:14.5px;font-weight:800;margin:8px 0 6px}
+.fstep p{font-size:11.5px;color:var(--sub);line-height:1.4}
+
+/* gantt */
+.gantt{font-size:12px}
+.gantt .gr{display:grid;grid-template-columns:150px repeat(6,1fr);gap:4px;align-items:center;margin-bottom:6px}
+.gantt .gh{font-size:11px;font-weight:800;color:var(--sub);text-align:center}
+.gantt .gl{font-weight:700;font-size:12px}
+.gantt .gb{height:26px;border-radius:4px;background:var(--acc);color:#fff;font-size:10.5px;
+  display:flex;align-items:center;padding:0 8px;overflow:hidden;white-space:nowrap}
+.gantt .gb.k{background:var(--ink)} .gantt .gb.a{background:var(--amb)} .gantt .gb.g{background:var(--grn)}
+
+/* appendix */
+.apphd{display:flex;align-items:flex-start;gap:16px}
+.apphd .no{background:var(--ink);color:#fff;font-size:15px;font-weight:800;padding:7px 12px;border-radius:6px;flex:none}
+.apphd h2{font-size:25px;font-weight:800;line-height:1.2;letter-spacing:-.02em}
+.apphd .mt{font-size:12.5px;color:var(--sub);margin-top:7px}
+.apphd .rt{margin-left:auto;text-align:right;flex:none}
+.oneline{background:var(--acc-bg);border-left:5px solid var(--acc);padding:13px 17px;border-radius:0 6px 6px 0;
+  font-size:16px;font-weight:800;line-height:1.4;margin:18px 0 16px}
+
+/* bubbles */
+.bub{display:flex;align-items:flex-end;gap:26px;justify-content:center;height:170px}
+.bub .bi{text-align:center}
+.bub .cc{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;margin:0 auto}
+.bub .nm{font-size:11.5px;margin-top:8px;font-weight:700}
+.bub .rl{font-size:10.5px;color:var(--sub)}
+
+/* oracle price */
+.opr{display:flex;gap:16px;align-items:center}
+.opr .ob{flex:1;border-radius:8px;padding:16px 18px}
+.opr .t1{font-size:12px;font-weight:800;letter-spacing:.04em}
+.opr .t2{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+.opr .t3{font-size:12px;margin-top:6px}
+
+/* 세션 카드 — 4칸 고정 템플릿 */
+.sc{background:var(--panel);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;height:100%}
+.sc .hd{background:var(--ink);color:#fff;padding:10px 14px;display:flex;align-items:flex-start;gap:9px}
+.sc .hd .nm{font-size:13.5px;font-weight:800;line-height:1.24}
+.sc .hd .og{font-size:10.5px;color:#8fc0d4;margin-top:4px;font-weight:600}
+.sc .hd .gr{margin-left:auto;flex:none;font-size:9.5px;font-weight:800;padding:3px 7px;border-radius:10px;white-space:nowrap}
+.sc .bx{padding:11px 14px 12px;flex:1;display:flex;flex-direction:column}
+.sc .f{margin-bottom:9px}
+.sc .f .lb{font-size:9.5px;font-weight:800;color:var(--sub);letter-spacing:.05em;margin-bottom:3px}
+.sc .f .tx{font-size:11.3px;line-height:1.42;color:#42525f}
+.sc .f .tx b{color:var(--ink);font-weight:700}
+.sc .f.o{background:#fff;border-left:3px solid var(--acc);border-radius:0 5px 5px 0;padding:7px 10px;margin-left:-3px}
+.sc .f.o .lb{color:var(--acc)}
+.sc .f.lim .lb{color:var(--red)}
+.sc .take{margin-top:auto;background:var(--acc-bg);border-radius:6px;padding:9px 11px}
+.sc .take .lb{font-size:9.5px;font-weight:800;color:var(--acc);letter-spacing:.05em;margin-bottom:3px}
+.sc .take .tx{font-size:11.3px;line-height:1.4;color:var(--ink);font-weight:600}
+.tmpl{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--sub);margin-bottom:12px}
+.tmpl b{color:var(--ink)}
+.tmpl .k{background:#eef2f5;border-radius:4px;padding:4px 9px;font-weight:700;color:var(--ink);font-size:10.5px}
+.tmpl .k.on{background:var(--acc);color:#fff}
+
+/* 인사이트 블록 + 코멘트 */
+.ins{display:flex;flex-direction:column;height:100%}
+.ins .tag{font-size:10.5px;font-weight:700;color:var(--sub);letter-spacing:.02em}
+.ins .ihd{font-size:19px;font-weight:800;line-height:1.3;letter-spacing:-.025em;margin:5px 0 11px}
+.ins .ihd em{font-style:normal;color:var(--acc)}
+.ins .ihd em.r{color:var(--red)}
+.ins ul{list-style:none;margin-bottom:11px}
+.ins li{font-size:12px;color:#42525f;line-height:1.46;padding-left:12px;position:relative;margin-bottom:6px}
+.ins li:before{content:"";position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:#b6c1ca}
+.ins li b{color:var(--ink);font-weight:700}
+.cmt{margin-top:auto;background:var(--ink);color:#fff;border-radius:7px;padding:12px 15px}
+.cmt .lb{font-size:10px;font-weight:800;color:#8fc0d4;letter-spacing:.07em;margin-bottom:6px}
+.cmt p{font-size:12.3px;line-height:1.5;color:#dfe8ee}
+.cmt p+p{margin-top:7px}
+.cmt p b{color:#fff;font-weight:700}
+.cmt p em{font-style:normal;color:#8fc0d4;font-weight:700}
+.mini{display:flex;gap:4px;margin-bottom:11px}
+.mini .m{flex:1;border-radius:4px;padding:6px 5px;text-align:center;font-size:9.5px;font-weight:700;line-height:1.25;color:#fff}
+
+/* 인용 */
+.qt{border-left:3px solid var(--acc);padding:6px 0 6px 11px;margin-bottom:9px}
+.qt p{font-size:11.6px;line-height:1.44;color:var(--ink);font-weight:600}
+.qt .who{font-size:9.5px;color:var(--sub);margin-top:4px;font-weight:700;letter-spacing:.02em}
+.qt.r{border-left-color:var(--red)} .qt.r p{color:var(--red)}
+.qt.a{border-left-color:var(--amb)}
+.qt.k{border-left-color:var(--ink)}
+
+/* nav */
+.nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:5px}
+.nav a{width:8px;height:8px;border-radius:50%;background:#c2ccd4;display:block}
+.nav a:hover{background:var(--acc)}
+.top{position:fixed;left:14px;top:14px;z-index:50;background:rgba(18,41,63,.9);color:#fff;
+  font-size:11px;padding:7px 12px;border-radius:14px}
+
+/* ── 컨설팅 스타일 추가 ── */
+.q{background:var(--ink);color:#fff;border-radius:8px;padding:18px 22px}
+.q .lab{font-size:11px;font-weight:800;color:#8fc0d4;letter-spacing:.08em;margin-bottom:8px}
+.q .txt{font-size:21px;font-weight:800;line-height:1.35;letter-spacing:-.02em}
+.a{background:var(--grn-bg);border:2px solid var(--grn);border-radius:8px;padding:18px 22px}
+.a .lab{font-size:11px;font-weight:800;color:var(--grn);letter-spacing:.08em;margin-bottom:8px}
+.a .txt{font-size:22px;font-weight:800;line-height:1.32;color:var(--ink);letter-spacing:-.02em}
+.a .sub{font-size:12.5px;color:#42525f;margin-top:9px;line-height:1.45}
+.ev{background:var(--panel);border-radius:8px;padding:14px 16px;border-top:4px solid var(--acc);height:100%}
+.ev .no{font-size:10.5px;font-weight:800;color:var(--acc);letter-spacing:.06em}
+.ev h5{font-size:14.5px;font-weight:800;margin:6px 0 8px;line-height:1.3}
+.ev .big{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:7px}
+.ev p{font-size:11.5px;color:#4b5a67;line-height:1.42}
+.risk{background:var(--red-bg);border-left:5px solid var(--red);border-radius:0 6px 6px 0;padding:13px 18px}
+.risk .lab{font-size:11px;font-weight:800;color:var(--red);letter-spacing:.06em;margin-bottom:5px}
+.risk p{font-size:13px;line-height:1.45}
+.arrow{display:flex;align-items:center;gap:0}
+.arrow .st{flex:1;background:var(--panel);padding:11px 13px;position:relative;border-radius:5px}
+.arrow .st .n{font-size:10px;font-weight:800;color:var(--acc)}
+.arrow .st .t{font-size:12.5px;font-weight:700;margin-top:3px;line-height:1.25}
+.arrow .ar{width:22px;text-align:center;color:#b6c1ca;font-weight:800;font-size:15px;flex:none}
+
+/* 절 번호 헤더 */
+.sec{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.sec .no{width:21px;height:21px;background:var(--ink);color:#fff;border-radius:4px;
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.sec .tt{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+.sec .rm{margin-left:auto;font-size:11px;color:var(--sub)}
+.kv{width:100%;border-collapse:collapse;font-size:12.5px}
+.kv th{background:#eef2f5;color:var(--ink);text-align:left;font-weight:700;padding:8px 11px;width:96px;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+.kv td{padding:8px 11px;border-bottom:1px solid var(--line);line-height:1.4}
+.ol{list-style:none;counter-reset:o}
+.ol li{position:relative;padding-left:26px;margin-bottom:11px;font-size:12.5px;line-height:1.45;counter-increment:o}
+.ol li:before{content:counter(o);position:absolute;left:0;top:1px;width:17px;height:17px;border-radius:50%;
+  background:var(--acc);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ol li b{color:var(--ink)}
+
+/* 학회 한 줄 표기 */
+.confline{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.confline .tag{background:var(--ink);color:#fff;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:4px;flex:none}
+.confline .tag.a{background:var(--amb)}
+.confline .d{font-size:12px;line-height:1.3;white-space:nowrap}
+.confline .d b{font-weight:700}
+
+/* 스택 바 · 출처 · 비교 */
+.sbar{display:flex;height:40px;border-radius:6px;overflow:hidden}
+.sbar>div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;font-weight:800;text-align:center;line-height:1.2}
+.leg{display:flex;gap:16px;margin-top:9px;font-size:11px;color:var(--sub)}
+.leg span{display:flex;align-items:center;gap:5px}
+.leg i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.src{position:absolute;left:54px;right:54px;bottom:42px;font-size:10px;color:#9aa5ae;padding-top:8px;border-top:1px solid var(--line);line-height:1.5}
+.seg{background:var(--panel);border-radius:7px;padding:13px 15px;border-left:4px solid var(--acc)}
+.seg .t{font-size:11.5px;font-weight:800;color:var(--acc)}
+.seg .v{font-size:25px;font-weight:800;letter-spacing:-.03em;margin:5px 0 4px}
+.seg .d{font-size:11px;color:var(--sub);line-height:1.35}
+.grow{display:flex;align-items:flex-end;gap:11px;height:104px}
+.grow .g{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.grow .bb{width:100%;background:var(--ink);border-radius:4px 4px 0 0;display:flex;align-items:flex-start;
+  justify-content:center;color:#fff;font-size:12px;font-weight:800;padding-top:6px}
+.grow .lb{font-size:11px;color:var(--sub);margin-top:6px;font-weight:700}
+.grow .vv{font-size:14px;font-weight:800;letter-spacing:-.02em;margin-bottom:5px;white-space:nowrap}
+.grow2{display:flex;align-items:flex-end;gap:8px}
+.grow2 .g{display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.grow2 .bb2{width:100%;border-radius:4px 4px 0 0}
+.grow2 .lb{font-size:11px;color:var(--sub);margin-top:6px;font-weight:700;white-space:nowrap}
+/* 타임라인 */
+.tl{position:relative;padding-left:20px}
+.tl:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .it{position:relative;margin-bottom:13px}
+.tl .it:last-child{margin-bottom:0}
+.tl .it:before{content:"";position:absolute;left:-19px;top:5px;width:9px;height:9px;border-radius:50%;
+  background:var(--acc);box-shadow:0 0 0 2.5px #fff}
+.tl .it.k:before{background:var(--ink)}
+.tl .hd{font-size:13px;font-weight:800;line-height:1.3}
+.tl .amt{display:inline-block;background:var(--ink);color:#fff;font-size:10px;font-weight:800;
+  padding:2px 7px;border-radius:3px;margin-left:6px;vertical-align:1px}
+.tl .ds{font-size:11.5px;color:#4b5a67;line-height:1.4;margin-top:3px}
+.dir{display:inline-block;font-weight:800;font-size:12px}
+.dir.up{color:var(--grn)} .dir.dn{color:var(--red)}
+table.t.cmp th{padding:6px 8px;font-size:11px}
+table.t.cmp td{padding:5px 8px;line-height:1.28}
+.body.hassrc{padding-bottom:74px}
+.body.hassrc1{padding-bottom:58px}
+.shot{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff}
+.shot img{display:block;width:100%;height:auto}
+.shot .cap{font-size:10px;color:var(--sub);padding:5px 8px;border-top:1px solid var(--line);background:var(--panel)}
+.hbar{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.hbar .nm{width:74px;font-size:12px;font-weight:700;text-align:right;white-space:nowrap}
+.hbar .tr{flex:1;height:19px;background:#eef1f4;border-radius:3px;overflow:hidden}
+.hbar .fl{height:100%;border-radius:3px;background:var(--acc)}
+.hbar .vl{width:60px;font-size:11.5px;font-weight:800;white-space:nowrap}
+
+/* ── NAIS 추가 ── */
+.mx{display:grid;grid-template-columns:64px 1fr 1fr;grid-template-rows:30px 1fr 1fr;gap:8px;height:100%}
+.mx .h{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--sub)}
+.mx .c{background:var(--panel);border-radius:8px;padding:14px 16px;border-top:4px solid #c9d2da}
+.mx .c b{display:block;font-size:17px;font-weight:800;margin-bottom:6px}
+.mx .c span{font-size:12px;color:#42525f;line-height:1.45}
+.mx .c.hot{border-top-color:var(--ink)}
+.mx .c.key{border-top-color:var(--acc);background:var(--acc-bg)}
+.svgbox{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.svgbox svg{width:100%;height:100%;max-height:100%}
+.ph2{border:2px dashed #b6c1ca;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  color:#8a96a0;font-size:14px;font-weight:700;text-align:center;line-height:1.6;background:repeating-linear-gradient(45deg,#f5f7f9,#f5f7f9 10px,#fafbfc 10px,#fafbfc 20px)}
+@media print{
+  body{background:#fff}.nav,.top{display:none}
+  .deck{height:auto!important;overflow:visible!important}
+  .slide{margin:0;box-shadow:none;page-break-after:always;width:1280px;height:720px}
+  @page{size:1280px 720px;margin:0}
+}
+/* 봉수대 덱: 글씨 키움 */
+.stitle{font-size:34px!important}.ssub{font-size:19px!important}.stag{font-size:14px!important}
+.punch p{font-size:24px!important;line-height:1.4!important}.punch .s{font-size:16.5px!important;margin-top:6px!important;line-height:1.55!important}
+.src{font-size:12.5px!important}.foot{font-size:12px!important}
+.card{padding:22px 24px!important}
+</style>
+</head>
+<body>
+<div class="top">← → 이동 · P 인쇄(PDF)</div>
+<div class="deck" id="deck">
+<section class="slide cover">
+  <div class="bar"></div>
+  <div class="kick">D4D × EDTH Korean Defense Tech Hackathon · T2 OSINT</div>
+  <h1>봉수대<br><em>누구의 말이 행동으로 이어지는가</em></h1>
+  <div class="meta"><b style="color:#fff;font-size:19px">공개정보 경고·위협 발표를, 과거 기록으로 채점하는 조기경보 코파일럿</b></div>
+  <div class="who">2026.10.11</div>
+</section>
+<section class="slide">
+  <div class="stag">Ⅰ. 문제</div><div class="stitle">1. 경고는 넘친다. 어느 말을 믿을지 숫자가 없다</div><div class="rule" style="margin-top:14px"></div>
+  <div class="body hassrc1"><div class="fill" style="display:flex;align-items:center;justify-content:center;min-height:0"><svg viewBox="0 0 1000 480" style="width:100%;height:100%;max-height:100%" preserveAspectRatio="xMidYMid meet" font-family="Pretendard,Apple SD Gothic Neo,sans-serif"><rect x="20" y="40" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="62" font-size="15" fill="#12293f">📰 연합뉴스</text><path d="M210,57 C330,57 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="84" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="106" font-size="15" fill="#12293f">📰 KBS</text><path d="M210,101 C330,101 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="128" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="150" font-size="15" fill="#12293f">📰 MBC</text><path d="M210,145 C330,145 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="172" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="194" font-size="15" fill="#12293f">📰 조선일보</text><path d="M210,189 C330,189 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="216" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="238" font-size="15" fill="#12293f">📰 한겨레</text><path d="M210,233 C330,233 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="260" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="282" font-size="15" fill="#12293f">📰 경향신문</text><path d="M210,277 C330,277 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="304" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="326" font-size="15" fill="#12293f">📰 국민일보</text><path d="M210,321 C330,321 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="348" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="370" font-size="15" fill="#12293f">📰 데일리안</text><path d="M210,365 C330,365 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="392" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="414" font-size="15" fill="#12293f">📰 통일뉴스</text><path d="M210,409 C330,409 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><rect x="20" y="436" width="190" height="34" rx="6" fill="#f4f6f8" stroke="#dfe5ea"/><text x="34" y="458" font-size="15" fill="#12293f">📰 Daum</text><path d="M210,453 C330,453 330,250 430,250" fill="none" stroke="#6b7885" stroke-opacity=".35" stroke-width="2"/><circle cx="490" cy="250" r="62" fill="#12707f"/><text x="490" y="242" text-anchor="middle" font-size="17" fill="#fff" font-weight="800">담화 1건</text><text x="490" y="266" text-anchor="middle" font-size="13" fill="#d8eef1">원천 = 1</text><text x="115" y="30" text-anchor="middle" font-size="15" fill="#6b7885" font-weight="700">화면에 뜨는 기사 10건</text><path d="M570,250 L650,250" stroke="#12293f" stroke-width="3" marker-end="url(#ar)"/><defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#12293f"/></marker></defs><path d="M700,280 A130,130 0 0 1 960,280" fill="none" stroke="#dfe5ea" stroke-width="26"/><path d="M700,280 A130,130 0 0 1 804.0,152.60000000000002" fill="none" stroke="#a15c12" stroke-width="26" stroke-dasharray="6 6"/><text x="830" y="260" text-anchor="middle" font-size="70" font-weight="800" fill="#a15c12">?</text><text x="830" y="320" text-anchor="middle" font-size="20" font-weight="800" fill="#12293f">이 주체의 경고,</text><text x="830" y="346" text-anchor="middle" font-size="20" font-weight="800" fill="#12293f">과거에 몇 번 맞았나?</text></svg></div><div class="punch" style="padding-top:10px"><div class="b"></div><p>기사 수는 출처 수가 아니고, 경고 수는 신뢰도가 아니다<span class="s">분석관의 병목은 수집이 아니라 판단 — D4D T2 과제 01 배경</span></p></div></div>
+  <div class="src">예시 매체 = 2024-06-20 김여정 담화를 보도한 실제 매체 일부(Google 뉴스)</div>
+  <div class="foot">봉수대 — 누구의 말이 행동으로 이어지는가 &nbsp;|&nbsp; D4D × EDTH · T2 OSINT</div><div class="pno">1</div>
+</section>
+<section class="slide">
+  <div class="stag">Ⅱ. 원리</div><div class="stitle">2. 첩보를 모아, 독립적으로 겹치는 것만 정보로</div><div class="rule" style="margin-top:14px"></div>
+  <div class="body hassrc1"><div class="fill" style="display:flex;align-items:center;justify-content:center;min-height:0"><svg viewBox="0 0 1000 370" style="width:100%;height:100%;max-height:100%" preserveAspectRatio="xMidYMid meet" font-family="Pretendard,Apple SD Gothic Neo,sans-serif"><rect x="30" y="30" width="205" height="200" rx="14" fill="#f4f6f8" stroke="#dfe5ea"/><circle cx="132" cy="80" r="32" fill="#12707f"/><text x="132" y="92" text-anchor="middle" font-size="30">📡</text><text x="132" y="145" text-anchor="middle" font-size="24" font-weight="800" fill="#12293f">모은다</text><text x="132" y="178" text-anchor="middle" font-size="16" fill="#6b7885">'앞으로 하겠다'는</text><text x="132" y="202" text-anchor="middle" font-size="16" fill="#6b7885">공식 발표만</text><path d="M240,130 L270,130" stroke="#12293f" stroke-width="3" marker-end="url(#ar2)"/><rect x="275" y="30" width="205" height="200" rx="14" fill="#f4f6f8" stroke="#dfe5ea"/><circle cx="377" cy="80" r="32" fill="#12707f"/><text x="377" y="92" text-anchor="middle" font-size="30">🧷</text><text x="377" y="145" text-anchor="middle" font-size="24" font-weight="800" fill="#12293f">묶는다</text><text x="377" y="178" text-anchor="middle" font-size="16" fill="#6b7885">같은 주체 3일 안</text><text x="377" y="202" text-anchor="middle" font-size="16" fill="#6b7885">= 원천 1</text><path d="M485,130 L515,130" stroke="#12293f" stroke-width="3" marker-end="url(#ar2)"/><rect x="520" y="30" width="205" height="200" rx="14" fill="#f4f6f8" stroke="#dfe5ea"/><circle cx="622" cy="80" r="32" fill="#12707f"/><text x="622" y="92" text-anchor="middle" font-size="30">📅</text><text x="622" y="145" text-anchor="middle" font-size="24" font-weight="800" fill="#12293f">대조한다</text><text x="622" y="178" text-anchor="middle" font-size="16" fill="#6b7885">2~7일 안</text><text x="622" y="202" text-anchor="middle" font-size="16" fill="#6b7885">실제 사건?</text><path d="M730,130 L760,130" stroke="#12293f" stroke-width="3" marker-end="url(#ar2)"/><rect x="765" y="30" width="205" height="200" rx="14" fill="#f4f6f8" stroke="#dfe5ea"/><circle cx="867" cy="80" r="32" fill="#12707f"/><text x="867" y="92" text-anchor="middle" font-size="30">⚖</text><text x="867" y="145" text-anchor="middle" font-size="24" font-weight="800" fill="#12293f">채점한다</text><text x="867" y="178" text-anchor="middle" font-size="16" fill="#6b7885">기준선 대비</text><text x="867" y="202" text-anchor="middle" font-size="16" fill="#6b7885">배수</text><defs><marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#12293f"/></marker></defs><rect x="30" y="270" width="205" height="86" rx="10" fill="#fff" stroke="#a15c12" stroke-width="2"/><text x="132" y="305" text-anchor="middle" font-size="17" font-weight="800" fill="#a15c12">5/25 북 국방성</text><text x="132" y="333" text-anchor="middle" font-size="15" fill="#12293f">“곧 한국에 살포”</text><rect x="275" y="270" width="205" height="86" rx="10" fill="#fff" stroke="#a15c12" stroke-width="2"/><text x="377" y="305" text-anchor="middle" font-size="17" font-weight="800" fill="#a15c12">기사 1건</text><text x="377" y="333" text-anchor="middle" font-size="15" fill="#12293f">원천 1</text><rect x="520" y="270" width="205" height="86" rx="10" fill="#fff" stroke="#a15c12" stroke-width="2"/><text x="622" y="305" text-anchor="middle" font-size="17" font-weight="800" fill="#a15c12">3일 뒤 5/28</text><text x="622" y="333" text-anchor="middle" font-size="15" fill="#12293f">합참: 1차 살포 확인</text><rect x="765" y="270" width="205" height="86" rx="10" fill="#fff" stroke="#a15c12" stroke-width="2"/><text x="867" y="305" text-anchor="middle" font-size="17" font-weight="800" fill="#a15c12">9묶음 중 6</text><text x="867" y="333" text-anchor="middle" font-size="15" fill="#12293f">기준선 11.1% → 6.0배</text><text x="30" y="262" font-size="14" font-weight="700" fill="#a15c12">실제 한 건이 흐른 길</text></svg></div><div class="punch" style="padding-top:10px"><div class="b"></div><p>문장마다 출처 계열과 신뢰도 — 단일 · 교차 · 다중<span class="s">근거 없는 숫자·이름·다른 맥락 숫자는 검증자가 버리고, 버린 것도 보여준다 (심은 오류 2/2 탐지)</span></p></div></div>
+  <div class="src">분류 프롬프트는 결과 보기 전 고정 · 하루 차이는 기사 날짜 오차라 적중에서 제외</div>
+  <div class="foot">봉수대 — 누구의 말이 행동으로 이어지는가 &nbsp;|&nbsp; D4D × EDTH · T2 OSINT</div><div class="pno">2</div>
+</section>
+<section class="slide">
+  <div class="stag">Ⅲ. 제품</div><div class="stitle">3. 질문 하나 → 지식 그래프 · 지도 · 근거가 함께 움직인다</div><div class="rule" style="margin-top:14px"></div>
+  <div class="body hassrc1"><div class="fill shot" style="display:flex;align-items:center;justify-content:center;background:#0e0e10"><img src="shot-ops.png" style="max-width:100%;max-height:100%;object-fit:contain"></div></div>
+  <div class="src">왼쪽 상황 · 가운데 위성 지도 · 오른쪽 관계 그래프와 사건별 근거 사슬 · 실시간 스트림</div>
+  <div class="foot">봉수대 — 누구의 말이 행동으로 이어지는가 &nbsp;|&nbsp; D4D × EDTH · T2 OSINT</div><div class="pno">3</div>
+</section>
+<section class="slide">
+  <div class="stag">Ⅳ. 결과</div><div class="stitle">4. 북한의 예고는 신호, 중국 해경의 경고는 소음과 구별되지 않는다</div><div class="rule" style="margin-top:14px"></div>
+  <div class="body hassrc1"><div class="fill" style="display:flex;align-items:center;justify-content:center;min-height:0"><div style="display:grid;grid-template-columns:1.25fr 1fr;gap:26px;width:100%;height:100%;align-items:center"><div style="height:100%"><svg viewBox="0 0 560 270" style="width:100%;height:100%;max-height:100%" preserveAspectRatio="xMidYMid meet" font-family="Pretendard,Apple SD Gothic Neo,sans-serif"><line x1="246.66666666666666" y1="20" x2="246.66666666666666" y2="230" stroke="#6b7885" stroke-dasharray="5 4" stroke-width="2"/><text x="246.66666666666666" y="250" text-anchor="middle" font-size="13" fill="#6b7885">기준선 1배</text><line x1="283.3333333333333" y1="20" x2="283.3333333333333" y2="230" stroke="#dfe5ea"/><text x="283.3333333333333" y="250" text-anchor="middle" font-size="13" fill="#6b7885">2배</text><line x1="356.66666666666663" y1="20" x2="356.66666666666663" y2="230" stroke="#dfe5ea"/><text x="356.66666666666663" y="250" text-anchor="middle" font-size="13" fill="#6b7885">4배</text><line x1="430.0" y1="20" x2="430.0" y2="230" stroke="#dfe5ea"/><text x="430.0" y="250" text-anchor="middle" font-size="13" fill="#6b7885">6배</text><line x1="503.3333333333333" y1="20" x2="503.3333333333333" y2="230" stroke="#dfe5ea"/><text x="503.3333333333333" y="250" text-anchor="middle" font-size="13" fill="#6b7885">8배</text><text x="0" y="71" font-size="17" font-weight="800" fill="#12293f">북한 · 풍선 예고</text><text x="0" y="93" font-size="13" fill="#6b7885">예고 9묶음 중 6 실행 · 기준선 11.1%</text><line x1="327.0021268015011" y1="75" x2="500.4985710057005" y2="75" stroke="#1b6b4b" stroke-width="8" stroke-opacity=".3" stroke-linecap="round"/><circle cx="430.2202202202202" cy="75" r="14" fill="#1b6b4b"/><text x="430.2202202202202" y="51" text-anchor="middle" font-size="26" font-weight="800" fill="#1b6b4b">6.0배 신호</text><text x="0" y="181" font-size="17" font-weight="800" fill="#12293f">중국 해경·정부 · 남중국해</text><text x="0" y="203" font-size="13" fill="#6b7885">예고 20묶음 중 4 실행 · 기준선 14.8%</text><line x1="229.98242986448648" y1="185" x2="313.0684446460216" y2="185" stroke="#8a96a3" stroke-width="8" stroke-opacity=".3" stroke-linecap="round"/><circle cx="259.54954954954957" cy="185" r="14" fill="#8a96a3"/><text x="259.54954954954957" y="161" text-anchor="middle" font-size="26" font-weight="800" fill="#8a96a3">1.4배 미결</text></svg></div><div style="height:100%"><svg viewBox="0 0 440 230" style="width:100%;height:100%;max-height:100%" preserveAspectRatio="xMidYMid meet" font-family="Pretendard,Apple SD Gothic Neo,sans-serif"><line x1="20" y1="150" x2="420" y2="150" stroke="#12293f" stroke-width="2"/><text x="20.0" y="175" font-size="12" fill="#6b7885">5월</text><text x="87.75956284153006" y="175" font-size="12" fill="#6b7885">6월</text><text x="153.33333333333331" y="175" font-size="12" fill="#6b7885">7월</text><text x="221.0928961748634" y="175" font-size="12" fill="#6b7885">8월</text><text x="288.8524590163934" y="175" font-size="12" fill="#6b7885">9월</text><text x="354.42622950819674" y="175" font-size="12" fill="#6b7885">10월</text><path d="M65.45901639344262,115 L79.45901639344262,115 L72.45901639344262,101 Z" fill="#a82c38"/><path d="M72.01639344262296,115 L86.01639344262296,115 L79.01639344262296,101 Z" fill="#a82c38"/><path d="M82.94535519125684,115 L96.94535519125684,115 L89.94535519125684,101 Z" fill="#a82c38"/><path d="M122.28961748633881,115 L136.2896174863388,115 L129.2896174863388,101 Z" fill="#a82c38"/><path d="M122.28961748633881,115 L136.2896174863388,115 L129.2896174863388,101 Z" fill="#a82c38"/><path d="M172.56284153005464,115 L186.56284153005464,115 L179.56284153005464,101 Z" fill="#a82c38"/><path d="M369.2841530054645,115 L383.2841530054645,115 L376.2841530054645,101 Z" fill="#a82c38"/><path d="M404.2568306010929,115 L418.2568306010929,115 L411.2568306010929,101 Z" fill="#a82c38"/><circle cx="79.01639344262296" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="87.75956284153006" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="103.06010928961749" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="138.0327868852459" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="190.4918032786885" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="197.04918032786884" cy="150" r="8" fill="#1b6b4b" stroke="#1b6b4b" stroke-width="3"/><circle cx="203.60655737704917" cy="150" r="8" fill="#fff" stroke="#a82c38" stroke-width="3"/><circle cx="240.76502732240436" cy="150" r="8" fill="#fff" stroke="#a82c38" stroke-width="3"/><circle cx="295.40983606557376" cy="150" r="8" fill="#fff" stroke="#a82c38" stroke-width="3"/><path d="M14,40 L28,40 L21,28 Z" fill="#a82c38"/><text x="36" y="40" font-size="13" fill="#12293f">북측 예고</text><circle cx="120" cy="35" r="7" fill="#1b6b4b"/><text x="132" y="40" font-size="13" fill="#12293f">미리 잡은 살포</text><circle cx="250" cy="35" r="7" fill="#fff" stroke="#a82c38" stroke-width="3"/><text x="262" y="40" font-size="13" fill="#12293f">예고 없던 살포</text><text x="20" y="215" font-size="14" font-weight="700" fill="#12293f">2024 오물풍선 — ▲가 오르면 2~6일 뒤 ●</text></svg></div></div></div><div class="punch" style="padding-top:10px"><div class="b"></div><p>같은 엔진이 '누구의 말을 믿을지'를 숫자로 갈랐다<span class="s">남중국해는 규칙을 한반도에서 고정한 뒤 처음 적용한 시험 · 막대 = 95% 구간, 하한이 1배를 넘어야 신호</span></p></div></div>
+  <div class="src">정답지: 합참 발표 인용 보도 9건 · 필리핀 정부 발표 인용 6건 · Wilson 95% 구간 · 예고 없는 사건(풍선 재개 2건, DMZ 지뢰)은 공개 뉴스에 전조 없음</div>
+  <div class="foot">봉수대 — 누구의 말이 행동으로 이어지는가 &nbsp;|&nbsp; D4D × EDTH · T2 OSINT</div><div class="pno">4</div>
+</section>
+<section class="slide">
+  <div class="stag">Ⅵ. 마무리</div><div class="stitle">6. 판단을 대체하지 않는다. 분석관이 먼저 볼 것을 정해준다</div><div class="rule" style="margin-top:14px"></div>
+  <div class="body hassrc1"><div class="fill" style="display:flex;align-items:center;justify-content:center;min-height:0"><svg viewBox="0 0 1000 330" style="width:100%;height:100%;max-height:100%" preserveAspectRatio="xMidYMid meet" font-family="Pretendard,Apple SD Gothic Neo,sans-serif"><text x="150" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#12707f">지금</text><text x="850" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#a15c12">다음 — 예고 없는 도발용</text><rect x="40" y="60" width="220" height="68" rx="12" fill="#12707f"/><text x="70" y="103" font-size="26">📰</text><text x="110" y="102" font-size="18" font-weight="800" fill="#fff">공식 발표 보도</text><path d="M260,94 C360,94 360,190 430,190" fill="none" stroke="#12707f" stroke-width="3" stroke-opacity=".6"/><rect x="40" y="150" width="220" height="68" rx="12" fill="#12707f"/><text x="70" y="193" font-size="26">🎖</text><text x="110" y="192" font-size="18" font-weight="800" fill="#fff">군·정부 확인</text><path d="M260,184 C360,184 360,190 430,190" fill="none" stroke="#12707f" stroke-width="3" stroke-opacity=".6"/><rect x="40" y="240" width="220" height="68" rx="12" fill="#12707f"/><text x="70" y="283" font-size="26">🛢</text><text x="110" y="282" font-size="18" font-weight="800" fill="#fff">유가 (FRED)</text><path d="M260,274 C360,274 360,190 430,190" fill="none" stroke="#12707f" stroke-width="3" stroke-opacity=".6"/><rect x="740" y="60" width="220" height="68" rx="12" fill="#fff" stroke="#a15c12" stroke-width="2.5" stroke-dasharray="7 5"/><text x="770" y="103" font-size="26">🚢</text><text x="810" y="102" font-size="18" font-weight="800" fill="#a15c12">AIS 항적</text><path d="M740,94 C640,94 640,190 570,190" fill="none" stroke="#a15c12" stroke-width="3" stroke-dasharray="6 5"/><rect x="740" y="150" width="220" height="68" rx="12" fill="#fff" stroke="#a15c12" stroke-width="2.5" stroke-dasharray="7 5"/><text x="770" y="193" font-size="26">🛰</text><text x="810" y="192" font-size="18" font-weight="800" fill="#a15c12">위성 변화</text><path d="M740,184 C640,184 640,190 570,190" fill="none" stroke="#a15c12" stroke-width="3" stroke-dasharray="6 5"/><rect x="740" y="240" width="220" height="68" rx="12" fill="#fff" stroke="#a15c12" stroke-width="2.5" stroke-dasharray="7 5"/><text x="770" y="283" font-size="26">✈</text><text x="810" y="282" font-size="18" font-weight="800" fill="#a15c12">ADS-B 항적</text><path d="M740,274 C640,274 640,190 570,190" fill="none" stroke="#a15c12" stroke-width="3" stroke-dasharray="6 5"/><circle cx="500" cy="190" r="78" fill="#12293f"/><text x="500" y="180" text-anchor="middle" font-size="34">🔥</text><text x="500" y="215" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">같은 채점 틀</text><text x="500" y="310" text-anchor="middle" font-size="15" fill="#6b7885">규칙은 고정 · 데이터만 바꾼다 · 한반도 → 남중국해(영어·중국) 적용 완료</text></svg></div><div class="punch" style="padding-top:10px"><div class="b"></div><p>봉수대는 불을 올리고, 그 불이 맞았는지도 기록합니다<span class="s">공개정보 전용 → 동맹·민간과 공유 · 기존 자산: NAIS 해커톤의 '근거로만 답하는 에이전트' 원칙 · 오늘 만든 것: 수집기·분류기·원천 묶기·기준선 채점·검증자·작전 화면</span></p></div></div>
+  <div class="src">README.md · 실행: python3 server.py → 127.0.0.1:8790</div>
+  <div class="foot">봉수대 — 누구의 말이 행동으로 이어지는가 &nbsp;|&nbsp; D4D × EDTH · T2 OSINT</div><div class="pno">5</div>
+</section>
+</div>
+<div class="nav" id="nav"></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const deck=document.getElementById('deck'),nav=document.getElementById('nav');
+slides.forEach((s,i)=>{const a=document.createElement('a');a.href='#';a.title='p'+(i+1);
+  a.onclick=e=>{e.preventDefault();s.scrollIntoView({behavior:'smooth'})};nav.appendChild(a)});
+let idx=0;
+function go(n){idx=Math.max(0,Math.min(slides.length-1,n));slides[idx].scrollIntoView({behavior:'smooth'})}
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(idx+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(idx-1)}
+  if(e.key==='Home'){e.preventDefault();go(0)}
+  if(e.key==='End'){e.preventDefault();go(slides.length-1)}
+  if(e.key==='p'||e.key==='P'){window.print()}
+});
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting)idx=slides.indexOf(en.target)}),{threshold:.5});
+slides.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
